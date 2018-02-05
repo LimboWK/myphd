@@ -1,0 +1,1010 @@
+[INFO] Steering file: variables.py
+Available variables in Variable::Manager:
+
+--------------------------------------------------------------------------------
+
+                             Continuum Suppression                              
+CleoCone(integer,string) Returns i-th cleo cones. If only the variable is
+                        specified, the CleoCones are calculated from all final
+                        state particles. If string is set to 'ROE', the
+                        CleoCones are calculated only from ROE particles.
+                        Useful for ContinuumSuppression.
+                        Given particle needs a related ContinuumSuppression
+                        object (built using the ContinuumSuppressionBuilder).
+                        Returns -999 if particle is nullptr or if particle has
+                        no related ContinuumSuppression object.
+KSFWVariables(variable,string) Returns variable et, mm2, or one of the 16 KSFW
+                        moments. If only the variable is specified, the KSFW
+                        moment calculated from the B primary daughters is
+                        returned. If string is set to FS1, the KSFW moment
+                        calculated from the B final state daughters is returned.
+R2                      Reduced Fox-Wolfram moment R2
+R2EventLevel            Event-Level Reduced Fox-Wolfram moment R2
+cosTBTO                 Cosine of angle between thrust axis of B and thrust axis
+                        of ROE
+cosTBz                  Cosine of angle between thrust axis of B and z-axis
+thrustBm                Magnitude of the B thrust axis
+thrustOm                Magnitude of the ROE thrust axis
+transformedNetworkOutput(name, low, high) Transforms the network output C->C'
+                        via: C'=log((C-low)/(high-C))
+useThrustFrame(variable, mode) Returns the variable in respect to rotated
+                        coordinates, in which z lies on the specified thrust
+                        axis.
+                        If mode is set to Signal it will use the thrust axis of
+                        the reconstructed B candidate, if mode is set to ROE it
+                        will use the ROE thrust axis.
+                        If mode is set to Auto the function use the thrust axis
+                        based on isInRestOfEvent(particle).
+                        Like isinRestofEvent, you have to use path.for_each( . .
+                        .) to use this MetaVariable.
+
+                               DirectDaughterInfo                               
+hasCharmedDaughter(i)   Returns information regarding the charm quark presence
+                        in the decay.
+hasCharmoniumDaughter   Returns information regarding the charmonium state
+                        presence in the decay.
+hasRealPhotonDaughter   Returns information regarding photon daughter origin for
+                        a particle.
+
+                              ECL Cluster related                               
+clusterAbsZernikeMoment40 absolute value of Zernike moment 40 (shower shape
+                        variable)
+clusterAbsZernikeMoment51 absolute value of Zernike moment 51 (shower shape
+                        variable)
+clusterBelleQuality     ECL cluster's quality indicating a good cluster in
+                        GSIM(stored in deltaL of ECL cluster object).The Belle
+                        people used only clusters with quality == 0 in their
+                        E_{extra_ecl}
+clusterCRID             Returns the connected region ID this cluster belongs to.
+clusterClusterID        Returns the cluster id of this cluster within the
+                        connected region to which it belongs to.
+clusterConnectedRegionID ECL cluster's connected region ID0 if the cluster is
+                        not connected to a nearby track or if the cluster is
+                        directly matched to a track.
+clusterDeltaLTemp       Returns DeltaL for the shower shape.
+                        NOTE : this distance is calculated on the reconstructed
+                        level and is temporarily
+                        included to the ECLCLuster MDST data format for studying
+                        purposes. If it is found
+                        that it is not crucial for physics analysis then this
+                        variable will be removed in future releases.
+                        Therefore, keep in mind that this variable might be
+                        removed in the future!
+clusterE1E9             ratio of energies of the central crystal and 3x3
+                        crystals around the central crystal
+clusterE9E21            ratio of energies in inner 3x3 and (5x5 cells without
+                        corners)
+clusterE9E25            Deprecated - kept for backwards compatibility - returns
+                        clusterE9E21
+clusterErrorE           ECL cluster's Error on Energy
+clusterErrorTiming      ECL cluster's timing
+clusterHighestE         energy of the crystall with highest  energy
+clusterHypothesis       Returns the hypothesis ID of this cluster belongs.
+clusterLAT              LAT (shower variable)
+clusterMergedPi0        High momentum pi0 likelihood.
+clusterNHits            number of hits associated to this cluster
+clusterPhi              ECL cluster's azimuthal angle
+clusterR                ECL cluster's distance
+clusterReg              detection region in the ECL [1 - forward, 2 - barrel, 3
+                        - backward]
+clusterSecondMoment     Second moment. Used for merged pi0 identification.
+                        (shower shape variable)
+clusterTheta            ECL cluster's polar angle
+clusterTiming           ECL cluster's timing
+clusterTrackMatch       number of charged track matched to this cluster
+clusterUncorrE          ECL cluster's uncorrected energy
+clusterZernikeMVA       output of MVA using Zernike moments of the cluster.
+                        For cluster with hypothesisId==N1: raw MVA output.
+                        For cluster with hypothesisId==N2: 1 -
+                        prod{clusterZernikeMVA}, where the product is on all N1
+                        showers belonging to the same connected region (shower
+                        shape variable)
+goodBelleGamma          1.0 if photon candidate passes good photon selection
+                        criteria (For Belle data and MC, hence 50, 100, 150 MeV
+                        cuts)
+goodGamma               1.0 if photon candidate passes good photon selection
+                        criteria
+goodGammaUnCal          1.0 if photon candidate passes good photon selection
+                        criteria (to be used if photon's energy is not
+                        calibrated)
+goodSkimGamma           1.0 if photon candidate passes good photon skim
+                        selection criteria (20, 30, 40 MeV cuts)
+infinity                returns std::numeric_limits<double>::infinity()
+minC2HDist              Return distance from eclCluster to nearest point on
+                        nearest Helix at the ECL cylindrical radius.
+minC2TDistTemp          Return distance from eclCluster to nearest track hitting
+                        the ECL.
+                        NOTE : this distance is calculated on the reconstructed
+                        level and is temporarily
+                        included to the ECLCLuster MDST data format for studying
+                        purposes. If it is found
+                        to be effectively replaced by the 'minC2HDist', which
+                        can be calculated
+                        on the analysis level then this variable will be removed
+                        in future releases.
+                        Therefore, keep in mind that this variable might be
+                        removed in the future!
+random                  return a random number between 0 and 1. Can be used,
+                        e.g. for picking a randomcandidate in the best candidate
+                        selection.
+
+                                     Event                                      
+ECLEnergy               [Eventbased] total energy in ECL in the event
+Ecms                    [Eventbased] CMS energy
+Eher                    [Eventbased] HER energy
+Eler                    [Eventbased] LER energy
+EventType               EventType (0 MC, 1 Data)
+IPCov(i,j)              [Eventbased] (i,j)-th element of the IP covariance
+                        matrix
+IPX                     [Eventbased] x coordinate of the IP
+IPY                     [Eventbased] y coordinate of the IP
+IPZ                     [Eventbased] z coordinate of the IP
+KLMEnergy               [Eventbased] total energy in KLM in the event
+XAngle                  [Eventbased] Crossing angle
+evtNum                  [Eventbased] event number
+expNum                  [Eventbased] experiment number
+isContinuumEvent        [Eventbased] true if event doesn't contain an Y(4S)
+isNotContinuumEvent     [Eventbased] 1.0 if event does contain an Y(4S) and
+                        therefore is not a continuum Event
+missingEnergy           [Eventbased] difference between the total energy of
+                        tracks and clusters in CMS and the beam energy
+nECLClusters            [Eventbased] number of ECL in the event
+nKLMClusters            [Eventbased] number of KLM in the event
+nTracks                 [Eventbased] number of tracks in the event
+productionIdentifier    [Eventbased] production identifier
+runNum                  [Eventbased] run number
+uniqueEventID           [Eventbased] In some MC the expNum and runNum are 0,
+                        hence it is difficult to distinguish if candidates are
+                        reconstructed from the same or a different event. This
+                        variable constructs a hash from expNum, runNum, evtNum
+                        and other event-based variables, to create a unique
+                        identifier for each event. Consider using the
+                        eventCached MetaVariable if you write out this quantity
+                        for each candidate.
+
+                          Flavor Tagger MetaFunctions                           
+CheckingVariables(ListName, requestedVariable) FlavorTagging:[Eventbased]
+                        Available checking variables are getListSize for
+                        particle lists.
+FSCVariables(requestedVariable) FlavorTagging:[Eventbased] Kinematical variables
+                        for FastSlowCorrelated category (pFastCMS, cosSlowFast,
+                        SlowFastHaveOpositeCharges, or cosTPTOFast).
+HighestProbInCat(particleListName, extraInfoName) Returns the highest target
+                        track probability value for the given category
+IsDaughterOf(variable)  Check if the particle is a daughter of the given list.
+KaonPionVariables(requestedVariable) Kinematical variables for KaonPion
+                        category (cosKaonPion or HaveOpositeCharges)
+QrOf(particleListName, extraInfoRightCategory, extraInfoRightTrack) FlavorTaggin
+                        g: [Eventbased] q*r where r is calculated from the
+                        output of event level in particlelistName.
+SemiLeptonicVariables(requestedVariable) FlavorTagging:[Eventbased] Kinematical
+                        variables (recoilMass, pMissCMS, cosThetaMissCMS or
+                        EW90) assuming a semileptonic decay with the given
+                        particle as target.
+hasHighestProbInCat(particleListName, extraInfoName) Returns 1.0 if the given
+                        Particle is classified as target track, i.e. if it has
+                        the highest target track probability in
+                        particlelistName. The probability is accessed via
+                        extraInfoName.
+hasTrueTarget(categoryName) Returns 1 if the given category has a target. 0
+                        Else.
+isRightCategory(particleName) FlavorTagging: returns 1 if the class track by
+                        particleName category has the same flavor as the MC
+                        target track 0 else also if there is no target track
+isRightTrack(particleName) Checks if the given Particle was really from a B. 1.0
+                        if true otherwise 0.0
+isTrueCategory(categoryName) Returns 1 if the given category tags the B0 MC
+                        flavor correctly. 0 Else.
+qOutput(combinerMethod) Returns the flavor tag q output of the flavorTagger for
+                        the given combinerMethod. The default methods are 'FBDT'
+                        or 'FANN'.
+qrOutput(combinerMethod) Returns the output of the flavorTagger for the given
+                        combinerMethod. The default methods are 'FBDT' or
+                        'FANN'.
+rBinBelle(combinerMethod) Returns the corresponding r (dilution) bin according
+                        to the Belle binning for the given combinerMethod. The
+                        default methods are 'FBDT' or 'FANN'.
+weightedQrOf(particleListName, extraInfoRightCategory, extraInfoRightTrack) Flav
+                        orTagging: [Eventbased] weighted q*r where r is
+                        calculated from the output of event level for the 3
+                        particles with highest track probability in
+                        particlelistName.
+
+                            Flavor Tagger Variables                             
+B0mcErrors              mcErrors MCMatching Flag on the reconstructed B0_cp.
+McFlavorOfTagSide       Flavor of tag side from MC extracted from the RoE
+NumberOfKShortsInRoe    Returns the number of K_S0 in the rest of event. The
+                        particleList K_S0:inRoe is required
+ancestorHasWhichFlavor  checks the decay chain of the given particle upwards up
+                        to the Y(4S) resonance.Output is 0 (1) if an ancestor is
+                        found to be a B0bar (B0), if not -2.
+chargeTimesKaonLiklihood Returns the q*(highest PID_Likelihood for Kaons), else
+                        0.
+cosTPTO                 cosine of angle between thrust axis of given particle
+                        and thrust axis of ROE
+hasRestOfEventTracks    Returns the amount of tracks in the RestOfEvent related
+                        to the given Particle. -2 If ROE is empty.
+isInElectronOrMuonCat   Returns 1.0 if the particle has been selected as target
+                        in the Muon or Electron Category, 0.0 else.
+isLambda                1.0 if MCLambda0, 0.0 else.
+isMajorityInRestOfEventFromB0 [Eventbased] Check if the majority of the tracks
+                        in the current RestOfEvent are from a B0.
+isMajorityInRestOfEventFromB0bar [Eventbased] Check if the majority of the
+                        tracks in the current RestOfEvent are from a B0bar.
+isRelatedRestOfEventB0Flavor -1 (1) if the RestOfEvent related to the given
+                        Particle is related to a B0bar (B0). The MCError bit of
+                        Breco has to be 0, 1, 2, 16 or 1024. The output of the
+                        variable is 0 otherwise. If one Particle in the Rest of
+                        Event is found to belong the reconstructed B0, the
+                        output is -2(2) for a B0bar (B0) on the reco side.
+isRelatedRestOfEventMajorityB0Flavor 0 (1) if the majority of tracks and
+                        clusters of the RestOfEvent related to the given
+                        Particle are related to a B0bar (B0).
+isRestOfEventMajorityB0Flavor 0 (1) if the majority of tracks and clusters of
+                        the current RestOfEvent are related to a B0bar (B0).
+lambdaFlavor            1.0 if Lambda0, -1.0 if Anti-Lambda0, 0.0 else.
+lambdaZError            Returns the Matrixelement[2][2] of the
+                        PositionErrorMatrix of the Vertex fit.
+momentumOfSecondDaughter Returns the Momentum of second daughter if existing,
+                        else 0.
+momentumOfSecondDaughterCMS Returns the Momentum of second daughter if existing
+                        in CMS, else 0.
+pMissTag                Calculates the missing Momentum for a given particle on
+                        the tag side.
+ptTracksRoe             Returns the transverse momentum of all charged tracks if
+                        there exists a ROE for the given particle, else 0.
+qrCombined              -1 (1) if current RestOfEvent is related to a B0bar
+                        (B0). The MCError bit of Breco has to be 0, 1, 2, 16 or
+                        1024. The output of the variable is 0 otherwise. If one
+                        Particle in the Rest of Event is found to belong the
+                        reconstructed B0, the output is -2(2) for a B0bar (B0)
+                        on the reco side.
+
+                                  KLM Cluster                                   
+klmClusterInnermostLayer Returns KLM cluster's number of the innermost layer
+                        with hits.
+klmClusterLayers        Returns KLM cluster's number of layers with hits.
+klmClusterPositionX     Returns KLMCluster's x position.
+klmClusterPositionY     Returns KLMCluster's y position.
+klmClusterPositionZ     Returns KLMCluster's z position.
+klmClusterTiming        Returns KLMCluster's timing info.
+
+                                   Kinematics                                   
+E                       energy
+ErrM                    uncertainty of invariant mass (determined from
+                        particle's daughter 4 - momentum vectors)
+ImpactXY                The impact parameter of the given particle in the xy
+                        plane
+InvM                    invariant mass (determined from particle's daughter 4 -
+                        momentum vectors)
+InvMLambda              invariant mass(determined from particle's daughter
+                        4-momentum vectors)
+M                       invariant mass(determined from particle's 4-momentum
+                        vector)
+Mbc                     beam constrained mass
+PDG                     PDG code
+Q                       released energy in decay
+SigM                    signed deviation of particle's invariant mass from its
+                        nominal mass
+SigMBF                  signed deviation of particle's invariant mass(determined
+                        from particle's daughter 4-momentum vectors) from its
+                        nominal mass
+Theta                   polar angle
+ThetaErr                error of polar angle
+VertexZDist             Z - distance of two daughter tracks at vertex point
+cosAngleBetweenMomentumAndVertexVector cosine of the angle between momentum and
+                        vertex vector (vector connecting ip and fitted vertex)
+                        of this particle
+cosHelicityAngle        If the given particle has two daughters: cosine of the
+                        angle between the line defined by the momentum
+                        difference of the two daughters in the frame of the
+                        given particle (mother)and the momentum of the given
+                        particle in the lab frame
+                        If the given particle has three daughters: cosine of the
+                        angle between the normal vector of the plane defined by
+                        the momenta of the three daughters in the frame of the
+                        given particle (mother)and the momentum of the given
+                        particle in the lab frame.
+                        Else: 0.
+cosHelicityAnglePi0Dalitz To be used for the decay pi0 -> e+ e- gamma: cosine of
+                        the angle between the momentum of the gamma in the frame
+                        of the given particle (mother)and the momentum of the
+                        given particle in the lab frame.
+                        Else: 0.
+cosTheta                momentum cosine of polar angle
+cosThetaBetweenParticleAndTrueB cosine of the angle between momentum the
+                        particle and a true B particle. Is somewhere between -1
+                        and 1 if only a massless particle like a neutrino is
+                        missing in the reconstruction.
+cosThetaErr             error of momentum cosine of polar angle
+dM                      mass minus nominal mass
+dQ                      released energy in decay minus nominal one
+dcosTheta               vertex polar angle in respect to IP
+deltaE                  energy difference
+distance                3D distance relative to interaction point
+dphi                    vertex azimuthal angle in degrees in respect to IP
+dr                      transverse distance in respect to IP
+dx                      x in respect to IP
+dy                      y in respect to IP
+dz                      z in respect to IP
+missingMass             missing mass squared of second daughter of a Upsilon
+                        calculated under the assumption that the first daughter
+                        of the Upsilon is the tag side and the energy of the tag
+                        side is equal to the beam energy
+missingMomentum         Missing Momentum of the Signal Side in CMS Frame
+momDevChi2              momentum deviation chi^2 value calculated aschi^2 =
+                        sum_i (p_i - mc(p_i))^2/sigma(p_i)^2, where sum runs
+                        over i = px, py, pz andmc(p_i) is the mc truth value and
+                        sigma(p_i) is the estimated error of i-th component of
+                        momentum vector
+momVertCovM(i,j)        returns the (i,j)-th element of the MomentumVertex
+                        Covariance Matrix (7x7).
+                        Order of elements in the covariance matrix is: px, py,
+                        pz, E, x, y, z.
+p                       momentum magnitude
+pErr                    error of momentum magnitude
+phi                     momentum azimuthal angle in degrees
+phiErr                  error of momentum azimuthal angle in degrees
+pt                      transverse momentum
+ptErr                   error of transverse momentum
+px                      momentum component x
+pxErr                   error of momentum component x
+py                      momentum component y
+pyErr                   error of momentum component y
+pz                      momentum component z
+pzErr                   error of momentum component z
+significanceOfDistance  significance of distance relative to interaction
+                        point(-1 in case of numerical problems)
+x                       x coordinate of vertex
+y                       y coordinate of vertex
+z                       z coordinate of vertex
+
+                                   L1Emulator                                   
+BhabhaVetoHLT           [Eventbased] the Bhabha veto
+SBhabhaVetoHLT          [Eventbased] the Bhabha veto with single track
+eclBhabhaVetoHLT        [Eventbased] the eclBhabha veto
+ggVetoHLT               [Eventbased] the gg Veto
+
+                                  MC Matching                                   
+genMotherID             Check the array index of a particles generated mother
+genMotherP              Generated momentum of a particles MC mother particle
+genMotherPDG            Check the PDG code of a particles MC mother particle
+genParticleID           Check the array index of a particle's related MCParticle
+isExtendedSignal        1.0 if Particle is almost correctly reconstructed
+                        (SIGNAL), 0.0 otherwise.
+                        Misidentification of charged FSP is allowed.
+isPrimarySignal         1.0 if Particle is correctly reconstructed (SIGNAL) and
+                        primary, 0.0 otherwise
+isSignal                1.0 if Particle is correctly reconstructed (SIGNAL), 0.0
+                        otherwise
+isSignalAcceptMissingNeutrino same as isSignal, but also accept missing neutrino
+mcDX                    The decay x-Vertex of matched MCParticle, -999 if no
+                        match. Requires running matchMCTruth() on the particles
+                        first.
+mcDY                    The decay y-Vertex of matched MCParticle, -999 if no
+                        match. Requires running matchMCTruth() on the particles
+                        first.
+mcDZ                    The decay z-Vertex of matched MCParticle, -999 if no
+                        match. Requires running matchMCTruth() on the particles
+                        first.
+mcDecayTime             The decay time of matched MCParticle, -999 if no match.
+                        Requires running matchMCTruth() on the particles first.
+mcE                     The energy of matched MCParticle, -999 if no match.
+                        Requires running matchMCTruth() on the particles first.
+mcErrors                The bit pattern indicating the quality of MC match (see
+                        MCMatching::MCErrorFlags)
+mcFSR                   Returns 1 if Particle is related to FSR MCParticle, 0 if
+                        Particle is related to non - FSR MCParticle,-1 if
+                        Particle is not related to MCParticle.
+mcISR                   Returns 1 if Particle is related to ISR MCParticle, 0 if
+                        Particle is related to non - ISR MCParticle,-1 if
+                        Particle is not related to MCParticle.
+mcInitial               Returns 1 if Particle is related to initial MCParticle,
+                        0 if Particle is related to non - initial MCParticle,-1
+                        if Particle is not related to MCParticle.
+mcMatchWeight           The weight of the Particle -> MCParticle relation (only
+                        for the first Relation = largest weight).
+mcP                     The total momentum of matched MCParticle, -999 if no
+                        match. Requires running matchMCTruth() on the particles
+                        first.
+mcPDG                   The PDG code of matched MCParticle, 0 if no match.
+                        Requires running matchMCTruth() on the particles first.
+mcPX                    The px of matched MCParticle, -999 if no match. Requires
+                        running matchMCTruth() on the particles first.
+mcPY                    The py of matched MCParticle, -999 if no match. Requires
+                        running matchMCTruth() on the particles first.
+mcPZ                    The pz of matched MCParticle, -999 if no match. Requires
+                        running matchMCTruth() on the particles first.
+mcPhotos                Returns 1 if Particle is related to Photos MCParticle, 0
+                        if Particle is related to non - Photos MCParticle,-1 if
+                        Particle is not related to MCParticle.
+mcRecoilMass            The mass recoiling against the particles attached as
+                        particle's daughters calculated using MC truth values.
+mcVirtual               Returns 1 if Particle is related to virtual MCParticle,
+                        0 if Particle is related to non - virtual MCParticle,-1
+                        if Particle is not related to MCParticle.
+nMCMatches              The number of relations of this Particle to MCParticle.
+
+                                 MetaFunctions                                  
+NBDeltaIfMissing(detector, variable) Returns value of variable if pid
+                        information of detector is available otherwise -999
+                        (delta function of NeuroBayes).
+                        Possible values for detector are TOP and ARICH.
+                        Useful as a feature variable for the NeuroBayes
+                        classifier, which tags missing values with -999.
+                        E.g. NBDeltaIfMissing(TOP, eid_TOP) returns electron id
+                        of TOP if this information is available, otherwise -999.
+                             NBDeltaIfMissing(ARICH, Kid_ARICH) returns kaon id
+                        of ARICH if this information is available, otherwise
+                        -999.
+abs(variable)           Returns absolute value of the given variable.
+                        E.g. abs(mcPDG) returns the absolute value of the mcPDG,
+                        which is often useful for cuts.
+cos(variable)           Returns cos value of the given variable.
+                        E.g. sin(?) returns the cosine of the value of the
+                        variable.
+countDaughters(cut)     Returns number of direct daughters which satisfy the
+                        cut.
+                        Used by the skimming package (for what exactly?)
+                        Returns -999 if particle is a nullptr.
+countInList(particleList, cut='') Returns number of particle which pass given in
+                        cut in the specified particle list.
+                        Useful for creating statistics about the number of
+                        particles in a list.
+                        E.g. countInList(e+, isSignal == 1) returns the number
+                        of correctly reconstructed electrons in the event.
+                        The variable is event-based and does not need a valid
+                        particle pointer as input.
+daughter(i, variable)   Returns value of variable for the i-th daughter.E.g.
+                        daughter(0, p) returns the total momentum of the first
+                        daughter.
+                             daughter(0, daughter(1, p) returns the total
+                        momentum of the second daughter of the first daughter.
+                        Returns -999 if particle is nullptr or if the given
+                        daughter-index is out of bound (>= amount of daughters).
+daughterAngleInBetween(i, j) If two indices given: Variable returns the angle
+                        between the momenta of the two given daughters.
+                        If three indices given: Variable returns the angle
+                        between the momentum of the third particle and a vector
+                        which is the sum of the first two daughter momenta.
+                        E.g. useLabFrame(daughterAngleInBetween(0, 1)) returns
+                        the angle between first and second daughter in the Lab
+                        frame.
+daughterDiffOf(i, j, variable) Returns the difference of a variable between the
+                        two given daughters.
+                        E.g. useRestFrame(daughterDiffOf(0, 1, p)) returns the
+                        momentum difference between first and second daughter in
+                        the rest frame of the given particle.
+daughterHighest(variable) Returns the highest value of the given variable among
+                        all daughters.
+                        E.g. useCMSFrame(daughterHighest(p)) returns the highest
+                        momentum in CMS frame.
+daughterInvM(i, j)      Returns the invariant Mass adding the Lorentz vectors of
+                        the given daughters.
+                        E.g. daughterInvM(0, 1, 2) returns the invariant Mass m
+                        = sqrt((p0 + p1 + p2)^2) of first, second and third
+                        daughter.
+daughterLowest(variable) Returns the lowest value of the given variable among
+                        all daughters.
+                        E.g. useCMSFrame(daughterLowest(p)) returns the lowest
+                        momentum in CMS frame.
+daughterNormDiffOf(i, j, variable) Returns the normalized difference of a
+                        variable between the two given daughters.
+                        E.g. daughterNormDiffOf(0, 1, p) returns the normalized
+                        momentum difference between first and second daughter in
+                        the lab frame.
+daughterProductOf(variable) Returns product of a variable over all daughters.
+                        E.g. daughterProductOf(extraInfo(SignalProbability))
+                        returns the product of the SignalProbabilitys of all
+                        daughters.
+daughterSumOf(variable) Returns sum of a variable over all daughters.
+                        E.g. daughterSumOf(nDaughters) returns the number of
+                        grand-daughters.
+eventCached(variable)   [eventbased] Returns value of event-based variable and
+                        caches this value in the EventExtraInfo.
+                        The result of second call to this variable in the same
+                        event will be provided from the cache.
+eventExtraInfo(name)    [eventbased] Returns extra info stored under the given
+                        name in the event extra info.
+                        The extraInfo has to be set first by another module like
+                        MVAExpert in event mode.
+                        E.g. extraInfo(SignalProbability) returns the
+                        SignalProbability calculated by the MVAExpert for an
+                        event.
+extraInfo(name)         Returns extra info stored under the given name.
+                        The extraInfo has to be set first by a module like
+                        MVAExpert. If nothing is set under this name, -999 is
+                        returned.
+                        E.g. extraInfo(SignalProbability) returns the
+                        SignalProbability calculated by the MVAExpert.
+formula(v1 + v2 * v3 - v4 / v5^v6) Returns the result of the given formula,
+                        where v1-v6 are variables.
+                        Useful Calculate formula, no parenthesis allowed yet.
+getVariableByRank(particleList, rankedVariableName, variableName, rank) Returns
+                        a specific variable according to its rank in a particle
+                        list.
+                        The rank is determined via BestCandidateSelection.
+                        BestCandidateSelection has to be used before.
+isDaughterOfList(particleListNames) Returns 1 if the given particle is a
+                        daughter of at least one of the particles in the given
+                        particle Lists.
+isGrandDaughterOfList(particleListNames) Returns 1 if the given particle is a
+                        grand daughter of at least one of the particles in the
+                        given particle Lists.
+isInfinity(variable)    Returns true if variable value evaluates to infinity
+                        (determined via std::isinf(double)).
+                        Useful for debugging.
+isNAN(variable)         Returns true if variable value evaluates to nan
+                        (determined via std::isnan(double)).
+                        Useful for debugging.
+matchedMC(variable)     Returns variable output for the matched MCParticle by
+                        constructing a temporary Particle from it.
+                        This may not work too well if your variable requires
+                        accessing daughters of the particle.
+                        E.g. matchedMC(p) returns the total momentum of the
+                        related MCParticle.
+                        Returns -999 if no matched MCParticle exists.
+matchedMCHasPDG(PDGCode) Returns if the absolute value of aPDGCode of a
+                        MCParticle related to a Particle matches a given
+                        PDGCode.Returns 0/0.5/1 if PDGCode does not match/is not
+                        available/ matches
+modulo(variable, n)     Returns rest of division of variable by n.
+nCleanedECLClusters(cut) [Eventbased] ]Returns the number of clean Clusters in
+                        the event
+                        Clean clusters are defined by the clusters which pass
+                        the given cut assuming a photon hypothesis.
+nCleanedTracks(cut)     [Eventbased] ]Returns the number of clean Tracks in the
+                        event
+                        Clean tracks are defined by the tracks which pass the
+                        given cut assuming a pion hypothesis.
+nParticlesInList(particleListName) Returns number of particles in the given
+                        particle List.
+numberOfNonOverlappingParticles(pList1, pList2, ...) Returns the number of non-
+                        overlapping particles in the given particle listsUseful
+                        to check if there is additional physics going on in the
+                        detector if one reconstructed the Y4S
+particleCached(variable) Returns value of given variable and caches this value
+                        in the ParticleExtraInfo of the provided particle.
+                        The result of second call to this variable on the same
+                        particle will be provided from the cache.
+passesCut(cut)          Returns 1 if particle passes the cut otherwise 0.
+                        Useful if you want to write out if a particle would have
+                        passed a cut or not.
+                        Returns -999 if particle is a nullptr.
+sin(variable)           Returns sin value of the given variable.
+                        E.g. sin(?) returns the sine of the value of the
+                        variable.
+useCMSFrame(variable)   Returns the value of the variable using the CMS frame as
+                        current reference frame.
+                        E.g. useCMSFrame(E) returns the energy of a particle in
+                        the CMS frame.
+useLabFrame(variable)   Returns the value of the variable using the lab frame as
+                        current reference frame.
+                        The lab frame is the default reference frame, usually
+                        you don't need to use this meta-variable.
+                        E.g. useLabFrame(E) returns the energy of a particle in
+                        the Lab frame, same as just E.
+                             useRestFrame(daughter(0, formula(E -
+                        useLabFrame(E)))) only corner-cases like this need to
+                        use this variable.
+useRestFrame(variable)  Returns the value of the variable using the rest frame
+                        of the given particle as current reference frame.
+                        E.g. useRestFrame(daughter(0, p)) returns the total
+                        momentum of the first daughter in its mother's rest-
+                        frame
+varFor(pdgCode, variable) Returns the value of the variable for the given
+                        particle if its abs(pdgCode) agrees with the given one.
+                        E.g. varFor(11, p) returns the momentum if the particle
+                        is an electron or a positron.
+veto(particleList, cut, pdgCode = 11) Combines current particle with particles
+                        from the given particle list and returns 1 if the
+                        combination passes the provided cut.
+                        For instance one can apply this function on a signal
+                        Photon and provide a list of all photons in the rest of
+                        event and a cut
+                        around the neutral Pion mass (e.g. 0.130 < M < 0.140).
+                        If a combination of the signal Photon with a ROE photon
+                        fits this criteria, hence looks like a neutral pion, the
+                        veto-Metavariable will return 1
+
+                                 Miscellaneous                                  
+CosMdstIndex            Cosinus of StoreArray index(0 - based) of the MDST
+                        object from which the Particle was created. To be used
+                        for random ranking.
+False                   returns always 0, used for testing and debugging.
+True                    returns always 1, used for testing and debugging.
+charge                  charge of particle
+chiProb                 chi ^ 2 probability of the fit
+decayTypeRecoil         type of the particle decay(no related mcparticle = -1,
+                        hadronic = 0, direct leptonic = 1, direct semileptonic =
+                        2,lower level leptonic = 3.
+eRecoil                 energy recoiling against given Particle
+flavor                  flavor type of decay(0 = unflavored, 1 = flavored)
+m2Recoil                invariant mass squared of the system recoiling against
+                        given Particle
+mRecoil                 invariant mass of the system recoiling against given
+                        Particle
+mcMomTransfer2          Return the true momentum transfer to lepton pair in a
+                        B(semi -) leptonic B meson decay.
+mcParticleStatus        Returns status bits of related MCParticle or - 1 if
+                        MCParticle relation is not set.
+mcPrimary               Returns 1 if Particle is related to primary MCParticle,
+                        0 if Particle is related to non - primary MCParticle,-1
+                        if Particle is not related to MCParticle.
+mcSecPhysProc           Returns the secondary physics process flag.
+mdstIndex               StoreArray index(0 - based) of the MDST object from
+                        which the Particle was created
+mdstSource              mdstSource - unique identifier for identification of
+                        Particles that are constructed from the same object in
+                        the detector (Track, energy deposit, ...)
+nDaughters              number of daughter particles
+nRemainingTracksInEvent Number of tracks in the event - Number of tracks( =
+                        charged FSPs) of particle.
+pRecoil                 magnitude of 3 - momentum recoiling against given
+                        Particle
+printParticle           For debugging, print Particle and daughter PDG codes,
+                        plus MC match. Returns 0.
+trackMatchType          -1 particle has no ECL cluster, 0 particle has no
+                        associated track, 1 there is a matched track, 2 the
+                        matched track is only nearby the clustercalled connected
+                        - region(CR) track match
+
+                                      PID                                       
+DLLElec                 Delta Log L = L(particle's hypothesis) - L(electron)
+DLLKaon                 Delta Log L = L(particle's hypothesis) - L(kaon)
+DLLMuon                 Delta Log L = L(particle's hypothesis) - L(muon)
+DLLPion                 Delta Log L = L(particle's hypothesis) - L(pion)
+DLLProt                 Delta Log L = L(particle's hypothesis) - L(proton)
+K_vs_piid               kaon vs pion identification probability
+Kid                     kaon identification probability
+Kid_ARICH               kaon identification probability from ARICH
+Kid_TOP                 kaon identification probability from TOP
+Kid_belle               kaon identification probability bellestyle
+Kid_dEdx                kaon identification probability from dEdx measurement
+atcPIDBelle(i,j)        returns Belle's PID atc variable:
+                        atc_pid(3,1,5,i,j).prob().
+                        To be used only when analysing converted Belle samples.
+d0                      Signed distance to the POCA in the r-phi plane
+d0Err                   Error of signed distance to the POCA in the r-phi plane
+eIDBelle                returns Belle's electron ID (eid(3,-1,5).prob())
+                        variable.
+                        To be used only when analysing converted Belle samples.
+eid                     electron identification probability
+eid_ARICH               electron identification probability from ARICH
+eid_ECL                 electron identification probability from ECL
+eid_TOP                 electron identification probability from TOP
+eid_dEdx                electron identification probability from dEdx
+                        measurement
+firstPXDLayer           First activated PXD layer associated to the track
+firstSVDLayer           First activated SVD layer associated to the track
+missing_ARICH           1.0 if identification probability from ARICH is missing
+missing_ECL             1.0 if identification probability from ECL is missing
+missing_TOP             1.0 if identification probability from TOP is missing
+muIDBelle               returns Belle's PID Muon_likelihood() variable.
+                        To be used only when analysing converted Belle samples.
+muIDBelleQuality        returns true if Belle's PID Muon_likelihood() is usable
+                        (reliable).
+                        To be used only when analysing converted Belle samples.
+muid                    muon identification probability
+muid_ARICH              muon identification probability from ARICH
+muid_KLM                muon identification probability from KLM
+muid_TOP                muon identification probability from TOP
+muid_dEdx               muon identification probability from dEdx measurement
+nCDCHits                Number of CDC hits associated to the track
+nPXDHits                Number of PXD hits associated to the track
+nSVDHits                Number of SVD hits associated to the track
+nVXDHits                Number of PXD and SVD hits associated to the track
+omega                   Curvature of the track
+omegaErr                Error of curvature of the track
+pValue                  chi2 probalility of the track fit
+phi0                    Angle of the transverse momentum in the r-phi plane
+phi0Err                 Error of angle of the transverse momentum in the r-phi
+                        plane
+pi_vs_edEdxid           pion vs electron identification probability from dEdx
+                        measurement
+pi_vs_eid               pion vs electron identification probability
+piid                    pion identification probability
+piid_ARICH              pion identification probability from ARICH
+piid_TOP                pion identification probability from TOP
+piid_dEdx               pion identification probability from dEdx measurement
+prid                    proton identification probability
+prid_ARICH              proton identification probability from ARICH
+prid_TOP                proton identification probability from TOP
+prid_dEdx               proton identification probability from dEdx measurement
+tanlambda               Slope of the track in the r-z plane
+tanlambdaErr            Error of slope of the track in the r-z plane
+z0                      z coordinate of the POCA
+z0Err                   Error of z coordinate of the POCA
+
+                               ParameterFunctions                               
+NumberOfMCParticlesInEvent(pdgcode) Returns number of MC Particles (including
+                        anti-particles) with the given pdgcode in the event.
+                        Used in the FEI to determine to calculate reconstruction
+                        efficiencies.
+                        The variable is event-based and does not need a valid
+                        particle pointer as input.
+V0Deltad0               Return the difference between d0 impact parameters of
+                        V0's daughters with the V0 vertex point as a pivot for
+                        the track.
+V0Deltaz0               Return the difference between z0 impact parameters of
+                        V0's daughters with the V0 vertex point as a pivot for
+                        the track.
+V0d0(id)                Return the d0 impact parameter of a V0's daughter with
+                        daughterID index with the V0 vertex point as a pivot for
+                        the track.
+V0z0(id)                Return the z0 impact parameter of a V0's daughter with
+                        daughterID index with the V0 vertex point as a pivot for
+                        the track.
+constant(float i)       Returns i.
+                        Useful for debugging purposes and in conjunction with
+                        the formula meta-variable.
+daughterAngle(i,j)      cosine of the angle between i-th and j-th daughters
+daughterInvariantMass(i, j, ...) Returns invariant mass of the given daughter
+                        particles.
+                        E.g. daughterInvariantMass(0, 1) returns the invariant
+                        mass of the first and second daughter.
+                             daughterInvariantMass(0, 1, 2) returns the
+                        invariant mass of the first, second and third daughter.
+                        Useful to identify intermediate resonances in a decay,
+                        which weren't reconstructed explicitly.
+                        Returns -999 if particle is nullptr or if the given
+                        daughter-index is out of bound (>= amount of daughters).
+decayAngle(i)           cosine of the angle between the mother momentum vector
+                        and the direction of the i-th daughter in the mother's
+                        rest frame
+genMotherID(i)          Check the array index of a particle n-th MC mother
+                        particle by providing an argument. 0 is first mother, 1
+                        is grandmother etc.
+genMotherPDG(i)         Check the PDG code of a particles n-th MC mother
+                        particle by providing an argument. 0 is first mother, 1
+                        is grandmother etc.
+hasAncestor(PDG, abs)   Returns a positive integer if an ancestor with the given
+                        PDG code is found, 0 otherwise.
+                        The integer is the level where the ancestor was found,
+                        1: first mother, 2: grandmother, etc.
+                        Second argument is optional, 1 means that the sign of
+                        the PDG code is taken into account, default is 0.
+                        If there is no MC relations found, -1 is returned. In
+                        case of nullptr particle, -999 is returned.
+isAncestorOf(i, j, ...) Returns a positive integer if daughter at position
+                        particle->daughter(i)->daughter(j)... is an ancestor of
+                        the related MC particle, 0 otherwise.
+                        Positive integer represents the number of steps needed
+                        to get from final MC daughter to ancestor.If any
+                        particle or MCparticle is a nullptr, -999 is returned.
+                        If MC relations of any particle doesn't exist, -1.0 is
+                        returned.
+massDifference(i)       Difference in invariant masses of this particle and its
+                        i-th daughter
+massDifferenceError(i)  Estimated uncertainty on difference in invariant masses
+                        of this particle and its i-th daughter
+massDifferenceSignificance(i) Signed significance of the deviation from the
+                        nominal mass difference of this particle and its i-th
+                        daughter [(massDiff - NOMINAL_MASS_DIFF)/ErrMassDiff]
+randomChoice(i, j, ...) Returns random element of given numbers.
+                        Useful for testing purposes
+
+                                 PhysicsTrigger                                 
+AngC1T1HLT              [Eventbased] the angle between T1 and C1
+AngC1T2HLT              [Eventbased] the angle between T2 and C1
+AngC2T1HLT              [Eventbased] the angle between T1 and C2
+AngC2T2HLT              [Eventbased] the angle between T2 and C2
+AngG1T1HLT              [Eventbased] the angle between the largest neutral
+                        cluster and T1
+AngG1T2HLT              [Eventbased] the angle between the largest neutral
+                        cluster and T2
+AngGGCMSHLT             [Eventbased] the angle between C1 and C2
+AngGTHLT                [Eventbased] the max angle between the largest neutral
+                        cluster and T1 (T2)
+AngTTCMSHLT             [Eventbased] the 3-D angle between trk1 and trk2 in CMS
+ChargeT1HLT             [Eventbased] the charge of trk1
+ChargeT2HLT             [Eventbased] the charge of trk2
+EC12CMSHLT              [Eventbased] the total energy of C1 and C2 in CMS
+EC12HLT                 [Eventbased] the total energy of C1 and C2
+EC1CMSHLT               [Eventbased] the most energetic ECL cluster in CMS, the
+                        cluster is denoted as C1
+EC1HLT                  [Eventbased] the most energetic ECL cluster, the cluster
+                        is denoted as C1
+EC2CMSHLT               [Eventbased] the secondary most energetic ECL cluster in
+                        CMS, the cluster is denoted as C2
+EC2HLT                  [Eventbased] the second most energetic ECL cluster, the
+                        cluster is denoted as C2
+ENeutralCMSHLT          [Eventbased] the secondary largest energy of the neutral
+                        cluster in CMS
+ENeutralHLT             [Eventbased] the largest energy of the neutral cluster
+ET1CMSHLT               [Eventbased] the energy of ECL cluster matched to trk1
+                        in CMS
+ET1HLT                  [Eventbased] the energy of ECL cluster matched to trk1
+ET2CMSHLT               [Eventbased] the energy of ECL cluster matched to trk2
+                        in CMS
+ET2HLT                  [Eventbased] the energy of ECL cluster matched to trk2
+EoPT1HLT                [Eventbased] the energy of ECL cluster matched to trk1
+                        over the momentum of trak1
+EoPT2HLT                [Eventbased] the energy of ECL cluster matched to trk2
+                        over the momentum of trak2
+EtotHLT                 [Eventbased] the total energy of ECL clusters
+Layer1KLMHLT            [Eventbased] the largest layers of KLM clusters
+Layer2KLMHLT            [Eventbased] the secondary largest layers of KLM
+                        clusters
+LayersT1HLT             [Eventbased] the layers of KLM cluster matched to trk1
+LayersT2HLT             [Eventbased] the layers of KLM cluster matched to trk2
+MinusThetaHLT           [Eventbased] the polar angle of trk with negative charge
+NEidHLT                 [Eventbased] the number of tracks which are identified
+                        as e: Pcms>5.0 GeV and E/P>0.8
+NcHLT                   [Eventbased] the number of ECL clusters
+NkHLT                   [Eventbased] the number of KLM clusters
+NltHLT                  [Eventbased] the number of long good tracks in the
+                        event: Pt>0.3 GeV
+NtHLT                   [Eventbased] the number of good tracks in the event
+NtcHLT                  [Eventbased] the number of tracks matched to ECL
+                        clusters in the event
+NtmHLT                  [Eventbased] the number of tracks matched to KLM
+                        clusters in the event
+PT12CMSHLT              [Eventbased] the total momentum of trk2 and trk1 in CMS
+PT1CMSHLT               [Eventbased] the momentum of trk1 in e+e- center of mass
+                        system (CMS)
+PT1HLT                  [Eventbased] the momentum of trk1, where trk1 is the
+                        track with the largest momentum
+PT2CMSHLT               [Eventbased] the momentum of trk2 in CMS
+PT2HLT                  [Eventbased] the momentum of trk2, where trk2 is the
+                        track with the secondary largest momentum
+PhiC1HLT                [Eventbased] the azimuthal angle of C1
+PhiC2HLT                [Eventbased] the azimuthal angle of C2
+PhiNeutralHLT           [Eventbased] the azimuthal angle of the neutral cluster
+                        with the largest energy
+PhiT1HLT                [Eventbased] the azimuthal angle of trk1
+PhiT2HLT                [Eventbased] the azimuthal angle of trk2
+PhiTTCMSHLT             [Eventbased] the azimuthal angle between trk1 and trk2
+                        in CMS
+PtT1HLT                 [Eventbased] the transverse momentum of trk1
+PtT2HLT                 [Eventbased] the transverse momentum of trk2
+RC1HLT                  [Eventbased] the distance between C1 and interation
+                        point (IP)
+RC2HLT                  [Eventbased] the distance between C2 and IP
+RNeutralHLT             [Eventbased] the distance between the neutral cluster
+                        and IP
+ThetaC1HLT              [Eventbased] the pular angle of C1
+ThetaC2HLT              [Eventbased] the polar of C2
+ThetaNeutralHLT         [Eventbased] the polar of the neutral cluster with the
+                        largest energy
+ThetaT1HLT              [Eventbased] the polar angle of trk1
+ThetaT2HLT              [Eventbased] the polar angle of trk2
+ThetaTTCMSHLT           [Eventbased] the accollinearity angle between trk1 and
+                        trk2 in CMS
+VisibleEnergyHLT        [Eventbased] total visible energy (the sum of the
+                        charged track's momenta and the ECL cluster's energies)
+VisiblePzHLT            [Eventbased] the sum of the absolute momentum in
+                        z-coordinate in the event
+maxAngMMHLT             [Eventbased] the maximum angle between two KLM Clusters
+maxAngTMHLT             [Eventbased] the maximum angle between CDC tracks and
+                        KLM Clusters
+maxAngTTCMSHLT          [Eventbased] the maximum angle between two charged
+                        tracks in CMS
+maxPhiTTCMSHLT          [Eventbased] the maximum azimuthal angle between two
+                        charged tracks in CMS
+maxThetaTTCMSHLT        [Eventbased] the maximum accollinearity angle between
+                        two charged tracks in CMS
+
+                                 Rest Of Event                                  
+ROE_E(maskName)         Returns energy of unused tracks and clusters in ROE
+ROE_M(maskName)         Returns invariant mass of unused tracks and clusters in
+                        ROE
+ROE_P(maskName)         Returns momentum of unused tracks and clusters in ROE
+ROE_Px(maskName)        Returns x component of momentum of unused tracks and
+                        clusters in ROE
+ROE_Py(maskName)        Returns y component of momentum of unused tracks and
+                        clusters in ROE
+ROE_Pz(maskName)        Returns z component of momentum of unused tracks and
+                        clusters in ROE
+ROE_charge(maskName)    Returns total charge of the related RestOfEvent object.
+ROE_deltae(maskName)    Returns energy difference of the related RestOfEvent
+                        object with respect to E_cms/2.
+ROE_eextra(maskName)    Returns extra energy from ECLClusters in the calorimeter
+                        that is not associated to the given Particle
+ROE_mbc(maskName)       Returns beam constrained mass of the related RestOfEvent
+                        object with respect to E_cms/2.
+ROE_mcMissFlags(maskName) Returns flags corresponding to missing particles on
+                        ROE side.
+ROE_neextra(maskName)   Returns extra energy from neutral ECLClusters in the
+                        calorimeter that is not associated to the given Particle
+bssMassDifference(maskName) Bs* - Bs mass difference
+correctedB_deltae(maskName, opt) Returns the energy difference of the B meson,
+                        corrected with the missing neutrino momentum
+                        (reconstructed side + neutrino) with respect to E_cms/2.
+correctedB_mbc(maskName, opt) Returns beam constrained mass of B meson,
+                        corrected with the missing neutrino momentum
+                        (reconstructed side + neutrino) with respect to E_cms/2.
+cosThetaEll(maskName)   Returns the angle between M and lepton in W rest frame
+                        in the decays of the type
+                        M -> h_1 ... h_n ell, where W 4-momentum is given as pW
+                        = p_ell + p_nu. The neutrino
+                        momentum is calculated from ROE taking into account the
+                        specified mask and setting
+                        E_nu = |p_miss|.
+currentROEIsInList(particleList) [EventBased] Returns 1 the associated particle
+                        of the current ROE is contained in the given list or its
+                        charge-conjugated.Useful to restrict the for_each loop
+                        over ROEs to ROEs of a certain ParticleList.
+isCompletelyInRestOfEvent Similar to isInRestOfEvent, but checks if all Mdst
+                        objects of the particle are in the RestOfEventOne can
+                        use this to distinguish ECLClusters with a connected-
+                        region matched Track outside the ROE,from ordinary
+                        ECLClusters in the ROE mask for ECLClusters.
+isInRestOfEvent         Returns 1 if a track, ecl or klmCluster associated to
+                        particle is in the current RestOfEvent object, 0
+                        otherwise.One can use this variable only in a for_each
+                        loop over the RestOfEvent StoreArray.
+mcROE_E                 Returns true energy of unused tracks and clusters in ROE
+mcROE_M                 Returns true invariant mass of unused tracks and
+                        clusters in ROE
+mcROE_P                 Returns true momentum of unused tracks and clusters in
+                        ROE
+mcROE_Px                Returns x component of true momentum of unused tracks
+                        and clusters in ROE
+mcROE_Py                Returns y component of true momentum of unused tracks
+                        and clusters in ROE
+mcROE_Pz                Returns z component of true momentum of unused tracks
+                        and clusters in ROE
+missE(maskName, opt)    Returns the energy of the missing momentum (see possible
+                        options)
+missM2(maskName, opt)   Returns the invariant mass squared of the missing
+                        momentum (see possible options)
+missM2OverMissE(maskName) Returns custom variable missing mass squared over
+                        missing energy
+missP(maskName, opt)    Returns the magnitude of the missing momentum (see
+                        possible options)
+missPTheta(maskName, opt) Returns the polar angle of the missing momentum (see
+                        possible options)
+missPx(maskName, opt)   Returns the x component of the missing momentum (see
+                        possible options)
+missPy(maskName, opt)   Returns the y component of the missing momentum (see
+                        possible options)
+missPz(maskName, opt)   Returns the z component of the missing momentum (see
+                        possible options)
+nParticlesInROE(pListName) Returns the number of particles in ROE from the given
+                        particle list.
+                        Use of variable aliases is advised.
+nROEECLClusters(maskName) Returns number of ECL clusters in the related
+                        RestOfEvent object that pass the selection criteria.
+nROEKLMClusters         Returns number of all remaining KLM clusters in the
+                        related RestOfEvent object.
+nROENeutralECLClusters(maskName) Returns number of neutral ECL clusters in the
+                        related RestOfEvent object that pass the selection
+                        criteria.
+nROETracks(maskName)    Returns number of tracks in the related RestOfEvent
+                        object that pass the selection criteria.
+nRemainingTracksInRestOfEvent Returns number of tracks in ROE - number of tracks
+                        of given particleOne can use this variable only in a
+                        for_each loop over the RestOfEvent StoreArray.
+particleRelatedToCurrentROE(var) [EventBased] Returns variable applied to the
+                        particle which is related to the current RestOfEvent
+                        objectOne can use this variable only in a for_each loop
+                        over the RestOfEvent StoreArray.
+passesROEMask(maskName) Returns boolean value if track or eclCluster type
+                        particle passes a certain mask or not. Only to be used
+                        in for_each path
+q2Bh                    Returns the momentum transfer squared, q^2, calculated
+                        in CMS as q^2 = (p_B - p_h)^2,
+                        where p_h is the CMS momentum of all hadrons in the
+                        decay B -> H_1 ... H_n ell nu_ell.
+                        The B meson momentum in CMS is assumed to be 0.
+q2lnu(maskName)         Returns the momentum transfer squared, q^2, calculated
+                        in LAB as q^2 = (p_l + p_nu)^2,
+                        where B -> H_1 ... H_n ell nu_ell. Lepton is assumed to
+                        be the last reconstructed daughter.
+xiZ(maskName)           Returns Xi_z in event (for Bhabha suppression and two-
+                        photon scattering)
+
+                                     TDCPV                                      
+DeltaB                  Boost direction: Brec - Btag
+DeltaT                  Delta T(Brec - Btag) in ps
+DeltaTErr               Delta T error in ps
+DeltaZ                  Z(Brec) - Z(Btag)
+MCDeltaT                Generated Delta T(Brec - Btag) in ps
+MCTagBFlavor            Tag MC Tag B Flavor information
+TagVx                   Tag vertex X
+TagVy                   Tag vertex Y
+TagVz                   Tag vertex Z
+--------------------------------------------------------------------------------
+
+[?1034h

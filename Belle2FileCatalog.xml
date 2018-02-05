@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FileCatalog>
+  <File>
+    <LFN>/gpfs/home/belle2/wankun/workdir/myRelease/myphd/RootOutput.root</LFN>
+    <PFN>/gpfs/home/belle2/wankun/workdir/myRelease/myphd/RootOutput.root</PFN>
+    <ExperimentLow>1</ExperimentLow>
+    <RunLow>1</RunLow>
+    <EventLow>1</EventLow>
+    <ExperimentHigh>1</ExperimentHigh>
+    <RunHigh>1</RunHigh>
+    <EventHigh>1000</EventHigh>
+  </File>
+</FileCatalog>
