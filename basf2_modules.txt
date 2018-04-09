@@ -1,0 +1,1275 @@
+
+*************************************************************
+ Geant4 version Name: geant4-10-01-patch-02    (19-June-2015)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+
+--------------------------------------------------------------------------------
+
+                                   alignment                                    
+AlignmentGenerator      Generates VXD alignment.Generated alignment overrides
+                        any existing one in reconstruction if done with this
+                        module. The generated object can also be stored as
+                        payload in the (local) DB, to keep track of it.
+CosmicsAlignmentValidation Alignment Validation with Cosmics
+GBLfit                  Uses GenFit2 to fit tracks. Needs genfit::TrackCands as
+                        input and provides genfit::Tracks and Tracks as output.
+MillepedeCollector      Calibration data collector for Millepede Algorithm
+UpdateParticleTrackCand Updates the seed in TrackCand based on fitted state (at
+                        vertex)
+
+                                    analysis                                    
+AnalysisConfiguration   This is a supplimentary module designed to configure
+                        other modules
+BestCandidateSelection  Selects Particles with the highest values of 'variable'
+                        in the input list and removes all other particles from
+                        the list. Particles will receive an extra-info field
+                        '${variable}_rank' containing their rank as an integer
+                        starting at 1 (best). The ranking also takes
+                        antiparticles into account, so there will only be one
+                        B+- candidate with rank=1. Candidates with same value of
+                        'variable' will have different ranks, with undefined
+                        order. The remaining list is sorted from best to worst
+                        candidate (each charge, e.g. B+/B-, separately).
+ContinuumSuppressionBuilder Creates for each Particle in the given ParticleLists
+                        a ContinuumSuppression dataobject and makes BASF2
+                        relation between them.
+ECLClusterInfo          Creates an output root file which contains info from ECL
+                        clusters.
+                        Note that since release-00-08-00 multiple ECLClusters
+                        consisting of
+                        the same ECL crystals appear in the StoreArray. Use
+                        ConnecdtedRegionId,
+                        clusterID and hypothesis ID to separate them.
+ExtraInfoRemover        Filter based on ParticleLists, by setting return value
+                        to true if at least one of the given lists is not empty.
+FSRCorrection           Takes the particles from the given lepton list copies
+                        them to the output list and adds the 4-vector of the
+                        closest photon (considered as radiative) to the lepton,
+                        if the given criteria for maximum angle and energy are
+                        fulfilled.
+FixECLClusters          Sets ConnectedRegionID and ClusterID to ECLClusters on
+                        MC samples with old ECLCluster design.
+FlavorTaggerInfoBuilder Initializes the FlavorTaggerInfo DataObject that will be
+                        used during the Flavor Tagging. Filling is done in the
+                        FlavorTagger.py script
+FlavorTaggerInfoFiller  Creates a new flavorTaggerInfoMap DataObject for the
+                        specific methods. Saves there all the relevant
+                        information of the flavorTagger.
+GammaEnergyCalibration  Calibrates energy of the photons
+InclusiveBtagReconstruction Inclusive Btag reconstruction
+MCDecayFinder           Find decays in MCParticle list matching a given
+                        DecayString and create Particles from them.
+MCMatcherParticles      Performs MC matching (sets relation
+                        Particle->MCParticle) for all particles
+                        (and its (grand)^N-daughter particles) in the
+                        ParticleList. The relation can
+                        be used in conjuction with MCMatching::MCErrorFlags
+                        flags, e.g. using the
+                        isSignal or mcPDG & mcErrors variables.
+
+                        In addition to the usual mc matching agorithm the module
+                        can run also loose mc
+                        matching. The difference between loose and normal mc
+                        matching algorithm is that
+                        the loose agorithm will find the common mother of the
+                        majority of daughter
+                        particles while the normal algorithm finds the common
+                        mother of all daughters.
+                        The results of loose mc matching algorithm are stored to
+                        the following extraInfo
+                        items:
+                         - looseMCMotherPDG: PDG code of most common mother
+                         - looseMCMotherIndex: 1-based StoreArray<MCParticle>
+                        index of most common mother
+                         - looseMCWrongDaughterN: number of daughters that don't
+                        originate from the most
+                                                  common mother
+                         - looseMCWrongDaughterPDG: PDG code of the daughter
+                        that doesn't orginate from
+                                                    the most common mother
+                                                    (only if
+                        looseMCWrongDaughterN = 1)
+                         - looseMCWrongDaughterBiB: 1 if the wrong daughter is
+                        Beam Induced Background
+                                                    Particle
+NtupleMaker             Make a TTree with the properties of selected decay
+                        products. See https://belle2.cc.kek.jp/~twiki/bin/view/P
+                        hysics/NtupleMaker for an introduction.
+ParticleCombiner        Makes particle combinations
+ParticleCopier          Replaces each Particle in the ParticleList with its
+                        copy.
+                        Particle's (grand)^n-daughter Particles are copied as
+                        well.
+                        The existing relations of the original Particle (or it's
+                        (grand-)^n-daughters)
+                        are copied as well.
+ParticleListManipulator Manipulates ParticleLists: copies/merges/performs
+                        particle selection
+ParticleLoader          Loads MDST dataobjects as Particle objects to the
+                        StoreArray<Particle> and collects them in specified
+                        ParticleList.
+ParticleMCDecayString   Creates the Monte Carlo decay string of a Particle and
+                        its daughters. The MC decay string of the particle is
+                        hashed and saved as a 32bit pattern in the extra info
+                        field decayHash of the particle. The MC decay string of
+                        the particel + its daughters is hashed as well and saved
+                        as another 32bit pattern in the extra info field
+                        decayHashExtended of the particle. The mapping hash <->
+                        MC decay string in saved in a TTree by this module. The
+                        32bit pattern must be saved as a float (because our
+                        extra info field, variable manager and ntuple output
+                        only supports float) But they just represent 32 bits of
+                        a hash!
+ParticleMassUpdater     This module replaces the mass of the particles inside
+                        the given particleLists with the invariant mass of the
+                        particle corresponding to the given pdgCode.
+ParticlePrinter         Prints specified variables for all particles in the
+                        specified particle list to screen (useful for
+                        debugging).
+                        Event-based variables can be printed by not specifying
+                        the particle list (empty string).
+ParticleSelector        Removes Particles from given ParticleList that do not
+                        pass specified selection criteria.
+ParticleStats           Make a summary of specific ParticleLists.
+ParticleVertexFitter    Vertex fitter for modular analysis
+RemoveParticlesNotInLists Removes all Particles that are not in one of the given
+                        ParticleLists (or daughters of Particles in the lists).
+                        All relations from/to Particles, daughter indices, and
+                        other ParticleLists are fixed. Note that this does not
+                        currently touch any data used to create final state
+                        particles, which might make up a large fraction of the
+                        total file size.
+RestOfEventBuilder      Creates for each Particle in the given ParticleList a
+                        RestOfEvent dataobject and makes BASF2 relation between
+                        them.
+RestOfEventInterpreter  Creates a mask (vector of boolean values) for tracks and
+                        clusters in RestOfEvent.
+RestOfEventPrinter      Prints basic or detailed RestOfEvent info to screen. It
+                        is possible to print out ROEMasks for specific mask
+                        names as well.
+RestOfEventUpdater      Updates an existing mask (map of boolean values) for
+                        tracks or eclClusters in RestOfEvent with an available
+                        property (e.g. after performing training).
+SignalSideParticleFilter The module returns true if the current RestOfEvent
+                        object is related to
+                        any of the Particles from the input ParticleList and
+                        passes selection criteria.
+                        The module should be executed only in the for_each ROE
+                        path.
+SignalSideParticleListCreator The module creates a ParticleList and fills it
+                        with one of the daughter Particles.
+SignalSideVariablesToExtraInfo The module writes property (value of specified
+                        variable) of single particle
+                        found in the input ParticleList as an ExtraInfo to the
+                        Particle related to
+                        the current ROE. This module is intended to be executed
+                        only in for_each ROE
+                        path.
+SkimFilter              Filter based on ParticleLists, by setting return value
+                        to true if at least one of the given lists is not empty.
+TagUniqueSignal         Mark true (target=1) candidates from input list via
+                        extra-info field.  Only the first true candidate
+                        associated with an MCParticle is marked.
+TagVertex               Tag side Vertex Fitter for modular analysis
+TreeFitter              Tree Fitter module. Performs simultaneous fit of all
+                        vertices in a decay chain.
+VariableToReturnValue   Calculate event-based variable specified by the user and
+                        sets return value of the module accordingly.
+VariablesToExtraInfo    For each particle in the input list the selected
+                        variables are saved in an extra-info field with the
+                        given name. Can be used when wanting to save variables
+                        before modifying them, e.g. when performing vertex fits.
+VariablesToHistogram    Calculate variables specified by the user for a given
+                        ParticleList and save them into a TH1F.
+VariablesToNtuple       Calculate variables specified by the user for a given
+                        ParticleList and save them into a TNtuple.
+VertexFitUpdateDaughters Partial Update Daughters
+
+                                     arich                                      
+ARICHBackground         ARICHBackground module. Used to extract information
+                        relevant for ARICH background from background files
+ARICHDQM                ARICH DQM histogrammer
+ARICHDigitizer          This module creates ARICHDigits from ARICHSimHits. Here
+                        spatial digitization is done, channel-by-channel QE is
+                        applied, and readout time window cut is applied.
+ARICHFillHits           Fills ARICHHits collection from ARICHDigits
+ARICHMCParticles        Creates collection of MCParticles related to tracks that
+                        hit ARICH.
+ARICHNtuple             The module saves variables needed for performance
+                        analysis, such as postion and momentum of the hit,
+                        likelihoods for hypotheses and number of photons.
+ARICHPacker             Raw data packer for ARICH
+ARICHReconstructor      This module calculates the ARICHLikelihood values for
+                        all particle id. hypotheses, for all tracks that enter
+                        ARICH in the event.
+ARICHRelate             Creates relations between ARICHAeroHits and ExtHits.
+                        Allows to store simulation output without MCParticles
+ARICHUnpacker           Raw data unpacker for ARICH
+arichBtest              Module for the ARICH Beamtest data analysis. It creates
+                        track form the MWPC hits and reads the HAPD hits
+
+                                     b2bii                                      
+B2BIIConvertMdst        Converts Belle mDST objects (Panther tables and records)
+                        to Belle II mDST objects.
+B2BIIFixMdst            Used to fix the old Belle I mdst files before
+                        processing. This module was taken from the old Belle I
+                        code and converted into a basf2 module.There are a lot
+                        of magic numbers in this module, where do they come
+                        from? Noone knows...Return value is -1 if something went
+                        wrong, do not use these events!
+B2BIIMCParticlesMonitor This module creates and fills B2BII MCParticles
+                        monitoring histograms.
+B2BIIMdstInput          Module to read Belle MDST files.
+
+                                   background                                   
+BGOverlayExecutor       Overlay of measured background with simulated data
+BGOverlayInput          Input for BG overlay, either in form of Digits or raw
+                        data.
+BeamBkgGenerator        Beam background generator based on SAD files. The
+                        generator picks up particles from the SAD file randomly
+                        according to their rates. Number of events is determined
+                        from 'realTime' and overall rate, and the generator
+                        terminates the execution when this number is reached.
+BeamBkgMixer            Beam background mixer at SimHit level that uses beam
+                        background simulation output directly (collision files)
+                        and not ROF files. Each background event is shifted in
+                        time randomly within a time window specified with
+                        minTime and maxTime.
+BeamBkgTagSetter        Sets beam background tag variable in SimHits and adds
+                        BackgroundMetaData branch in persistent tree; returns
+                        true if at least one of the SimHit store arrays has
+                        entries. Return value can be used to discard empty
+                        events at output.
+
+                                     beast                                      
+AnalysisPhase1Study     Study module for BEAST
+BeamDigitizer           Beamabort digitizer module
+Beamabort               Creates BEAMABORT crystals - sub-detector of BEASTII
+BeamabortStudy          Study module for Beamaborts (BEAST)
+Bgo                     Creates BGO crystals - sub-detector of BEASTII
+BgoDigitizer            Bgo digitizer module
+BgoStudy                Study module for Bgos (BEAST)
+CLAWS                   Creates CLAWS crystals - sub-detector of BEASTII
+CLAWSStudy              Study module for Claws (BEAST)
+Cave                    Creates the CAVE of phase 1 - BEASTII
+Claw                    Creates CLAW crystals - sub-detector of BEASTII
+ClawDigitizer           Claw digitizer module
+ClawStudy               Study module for Claws (BEAST)
+ClawsDigitizer          Claws digitizer module
+ClawsStudy              Study module for Clawss (BEAST)
+CsIDigitizer            Digitizer for the BEAST CsI system
+CsIStudy                Analyze simulations of CsI readings in BEAST. Requires
+                        HistoManager module.
+Csi                     Creates CSI crystals - sub-detector of BEASTII
+CsiDigitizer_v2         Csi digitizer_v2 module
+CsiStudy_v2             Study_v2 module for Csis (BEAST)
+Dosi                    Creates DOSI crystals - sub-detector of BEASTII
+DosiDigitizer           Dosi digitizer module
+DosiStudy               Study module for Dosis (BEAST)
+FANGS                   Creates FANGS crystals - sub-detector of BEASTII
+FANGSDigitizer          FANGS digitizer module
+FANGSStudy              Study module for Fangs (BEAST)
+He3Digitizer            He3tube digitizer module
+He3tube                 Creates Helium-3 tube - sub-detector of BEASTII
+He3tubeStudy            Study module for He3tubes (BEAST)
+Microtpc                Creates micro-Time Projection Chamber - sub-detector of
+                        BEASTII
+MicrotpcDailyReport     Study module for Microtpcs (BEAST)
+MicrotpcStudy           Study module for Microtpcs (BEAST)
+NtuplePhase1            Read SKB PVs, simulated measurements of BEAST sensors,
+                        and write scaled simulated Ntuple in BEAST phase 1 data
+                        format
+NtuplePhase1_v2         Read SKB PVs, simulated measurements of BEAST sensors,
+                        and write scaled simulated Ntuple in BEAST phase 1 data
+                        format
+NtuplePhase1_v3         Read SKB PVs, simulated measurements of BEAST sensors,
+                        and write scaled simulated Ntuple in BEAST phase 1 data
+                        format
+NtuplePhase1_v4         Read SKB PVs, simulated measurements of BEAST sensors,
+                        and write scaled simulated Ntuple in BEAST phase 1 data
+                        format
+NtuplePhase1_v5         Read SKB PVs, simulated measurements of BEAST sensors,
+                        and write scaled simulated Ntuple in BEAST phase 1 data
+                        format
+NtuplePhase1_v6         Read SKB PVs, simulated measurements of BEAST sensors,
+                        and write scaled simulated Ntuple in BEAST phase 1 data
+                        format
+Ph1bpipe                Creates phase 1 beam pipe - BEASTII
+Ph1sustr                Creates phase 1 support structure - BEASTII
+PinDigitizer            Pindiode digitizer module
+Pindiode                Creates PINDIODE crystals - sub-detector of BEASTII
+PindiodeStudy           Study module for Pindiodes (BEAST)
+Plume                   Creates PLUME - sub-detector of BEASTII
+PlumeDigitizer          PLUME digitizer module
+Qcsmonitor              Creates QCSMONITOR crystals - sub-detector of BEASTII
+QcsmonitorDigitizer     Qcsmonitor digitizer module
+QcsmonitorStudy         Study module for Qcsmonitors (BEAST)
+Reprocessor             Reprocessor module
+Srsensor                Creates Synchroton Radiation senor - sub-detector of
+                        BEASTII
+TPCStudy                Study module for Microtpcs (BEAST)
+TpcDataRootInput        Input of Phase 1 BEAST micro-TPC data from a specific
+                        root ntuple (Data_TPC tree)
+TpcDigitizer            Microtpc digitizer module
+TrackFitter             Track fitter module
+TrackFitter_v2          Track fitter module
+
+                                      bklm                                      
+BKLMDQM                 BKLM DQM histogrammer
+BKLMDigitizer           Creates BKLMDigits from BKLMSimHits
+BKLMEffnRadio           Get efficiency and generate radio plots for bklm
+BKLMK0LReconstructor    BKLM K0L reconstruction module.
+BKLMRawPacker           an Example to pack data to a RawKLM object
+BKLMReconstructor       BKLM reconstruction module of 1D and 2D hits
+BKLMSimHistogrammer     Analyzes bg
+BKLMTracking            perform standard-alone straight line tracking for BKLM
+BKLMUnpacker            Produce BKLMDigits from RawBKLM
+
+                                  calibration                                   
+CaTest                  Calibration Test Module
+TestCalibDBAccess       Testing DB objects made in Calibration
+TriggerSkim             Trigger Skim Module
+
+                                      cdc                                       
+CDCCRTest               CDC Cosmic ray test module
+CDCCosmicAnalysis       Module for save two tracks in cdc-top test
+CDCCosmicSelector       Select cosmics passing through the trigger counter
+CDCCosmicTrackMerger    Select cosmic events containing two tracks (up/down) and
+                        merge two tracksOld reco tracks store array will be
+                        deleted afterwards, if the parameter is set to do so.
+CDCDigitizer            Creates CDCHits from CDCSimHits.
+CDCHitFilter            Filter CDCHits
+CDCInitialT0Determination Module to determine crude t0
+CDCJobCntlParModifier   Change job contorol parameters. Please put this module
+                        in the path (before Geometry module) with specified
+                        input parameters when you want to change them.
+CDCPacker               Generate RawCDC object from CDCHit
+CDCRecoTrackFilter      use this module to exclude Layers in fitting, after
+                        TrackFinding
+CDCUnpacker             CDCUnpacker generates CDCHit from Raw data.
+cdcDQM7                 Exercise1 module
+
+                                    display                                     
+AsyncDisplay            Starts the Display module asynchronously (with buffered
+                        input). Note that the buffer is limited in size and not
+                        all events can be passed to the display once it is full.
+                        (Configurable using 'discardOldEvents' param).
+Display                 Interactive visualisation of Monte Carlo, intermediate
+                        and reconstructed objects, plus geometry. See https://co
+                        nfluence.desy.de/display/BI/Software+/EventDisplay for
+                        detailed documentation.
+
+                                      ecl                                       
+ECLBackground           Processes background campaigns and produces histograms.
+                        Requires HistoManager
+ECLCRFinder             ECLCRFinderModule
+ECLCRFinderAndSplitter  ECLCRFinderAndSplitterModule: Searches CRs and finds
+                        clusters in one step (reproduce old B2 reco behaviour)
+ECLCRFinderAndSplitterPureCsI ECLCRFinderAndSplitterModule: Searches CRs and
+                        finds clusters in one step (reproduce old B2 reco
+                        behaviour)
+ECLCRFinderPureCsI      ECLCRFinderModule
+ECLClusterAnalysis      This module produces an ntuple with ECL-related
+                        quantities starting from mdst
+ECLCovarianceMatrix     ECLCovarianceMatrix: Calculates ECL N1 shower covariance
+                        matrix.
+ECLCovarianceMatrixPureCsI ECLCovarianceMatrix: Calculates ECL N1 shower
+                        covariance matrix.
+ECLDataAnalysis         This module produces an ntuple with ECL-related
+                        quantities starting from mdst
+ECLDigiStudy            EclCovMatrixNtuple: write ECL waveform and fitted time
+                        and amplitude in a root file
+ECLDigitCalibrator      Applies digit energy, time and time-resolution
+                        calibration to each ECL digit. Counts number of out-of-
+                        time background digits to determine the event-by-event
+                        background level.
+ECLDigitCalibratorPureCsI Applies digit energy, time and time-resolution
+                        calibration to each ECL digit. Counts number of out-of-
+                        time background digits to determine the event-by-event
+                        background level.
+ECLDigitizer            Creates ECLDigiHits from ECLHits.
+ECLDigitizerPureCsI     Creates ECLDigiHits from ECLHits for Pure CsI.
+ECLElectronId           E/p based Electron ID. Likelihood values for each
+                        particle hypothesis are stored in an ECLPidLikelihood
+                        object.
+ECLFinalizer            ECLFinalizerModule: Converts ecl shower dataobjects to
+                        mdst eclcluster dataobjects
+ECLFinalizerPureCsI     ECLFinalizerModule: Converts ecl shower dataobjects to
+                        mdst eclcluster dataobjects
+ECLHitDebug             ECLHitDebugModule
+ECLLocalMaximumFinder   ECLLocalMaximumFinderModule
+ECLLocalMaximumFinderPureCsI ECLLocalMaximumFinderModule
+ECLMCMatching           ECLMCMatchingModule
+ECLPacker               The module reads ECLDigits from the DataStore and writes
+                        ECLRaw data.
+ECLShowerCalibrator     ECLShowerCalibratorModule: Corrects for data to MC
+                        differences
+ECLShowerCorrector      ECLShowerCorrectorModule: Corrects for MC truth to
+                        reconstruction shower and highest crystal energy
+                        differences
+ECLShowerShape          ECLShowerShapeModule: Calculate ECL shower shape
+                        variable (e.g. E9E21)
+ECLShowerShapePureCsI   ECLShowerShapeModule: Calculate ECL shower shape
+                        variable (e.g. E9E21)
+ECLSplitterN1           ECLSplitterN1Module: Baseline reconstruction splitter
+                        code for the all photon hypothesis (N1).
+ECLSplitterN1PureCsI    ECLSplitterN1Module: Baseline reconstruction splitter
+                        code for the all photon hypothesis (N1).
+ECLSplitterN2           ECLSplitterN2Module: Baseline reconstruction splitter
+                        code for the neutral hadron hypothesis (N2).
+ECLSplitterN2PureCsI    ECLSplitterN2Module: Baseline reconstruction splitter
+                        code for the neutral hadron hypothesis (N2).
+ECLTrackShowerMatch     Set the Track --> ECLShower and ECLCluster Relations.
+ECLUnpacker             The module reads RawECL data from the DataStore and
+                        writes the ECLDigit data
+EclCovMatrixNtuple      EclCovMatrixNtuple: write ECL waveform and fitted time
+                        and amplitude in a root file
+EclDisplay              DQM and event display module for ECL.
+MCMatcherECLClusters    MCMatcherECLClustersModule
+eclMuMuECollector       Calibration Collector Module for ECL single crystal
+                        energy calibration using muons
+
+                                      eklm                                      
+EKLMADC                 Standalone generation and studies of ADC output.
+EKLMAlignment           Module for generation of EKLM displacement data.
+EKLMDigitizer           EKLM digitization module
+EKLMRawPacker           EKLM raw data packer (creates RawKLM from EKLMDigit).
+EKLMReconstructor       EKLM reconstruction module.
+EKLMTimeCalibrationCollector Module for EKLM time calibration (data collection).
+EKLMUnpacker            EKLM unpacker (creates EKLMDigit from RawKLM).
+KLMClusterEfficiency    Module for KLM cluster reconstruction efficiency
+                        studies.
+KLMK0LReconstructor     Unified BKLM/EKLM K0L reconstruction module.
+MCMatcherKLMClusters    Module for MC matching for KLM clusters.
+
+                                   framework                                    
+CrashHandler            Internal module for graceful crash handling. If any of
+                        the wrapped modules abort, crash, etc., execution will
+                        continue after this module. The return value of this
+                        module is set to 0(false) in case of aborts (the
+                        DataStore will not contain any output from the wrapped
+                        modules); and to 1(true) if all modules executed
+                        normally.
+                        This is a stopgap measure to avoid stopping the HLT
+                        because of software errors. It does not absolve you of
+                        the responsibility to fix your software.
+EventInfoPrinter        Prints the current event meta data information (exp,
+                        run, event numbers).
+EventInfoSetter         Sets the event meta data information (exp, run, evt).
+                        You must use this module to tell basf2 about the number
+                        of events you want to generate, unless you have an input
+                        module that already does so. Note that all
+                        experiment/run combinations specified must be unique.
+Gearbox                 Loads the Belle II detector parameters from an XML
+                        document.
+HistoManager            Manage histograms/Ntuples/TTrees for modules inheriting
+                        from the HistoModule class. See https://confluence.desy.
+                        de/display/BI/Software+HistogramManagement for details.
+Interactive             Start an interactive (I)python shell in each call of
+                        event().  Also imports the ROOT.Belle2 namespace for
+                        convenience, allowing you to use Belle2.PyStoreArray
+                        etc. directly.
+PrintBeamParameters     Print the BeamParameters everytime they change
+PrintCollections        Prints the contents of the DataStore in each event,
+                        listing all objects and arrays (including size).
+Profile                 Records execution time and memory usage in ProfileInfo
+                        objects for each event. Can also graph memory usage.
+Progress                Periodically writes the number of processed events/runs
+                        to the logging system to give a progress indication.
+                        The output is logarithmic, meaning it will output the
+                        first 10 events, then every tenth event up to 100, then
+                        every hundreth event up to 1000, etc. Output cannot be
+                        suppressed using set_log_level. If you don't want
+                        messages, you don't want this module
+ProgressBar             Display a progress bar and an estimate of remaining time
+                        when number of events is known (e.g. reading from file,
+                        or -n switch used). The bar uses stderr for output, so
+                        it works best when stdout is piped to a file.
+PruneDataStore          Clears the content of the DataStore while it keeps
+                        entries listed in the keepEntries option. The
+                        EventMetaData object will always be kept, as it is
+                        required by the framework to properly work with the
+                        DataStore. Note: Also all Relations will be cleared if
+                        they are not matched by one entry in the keepEntries
+                        list. You have to ensure the objects referenced by kept
+                        relations are also matched by one entry in the
+                        keepEntries list so a relation does not point to
+                        nirvana.
+RandomBarrier           Sets gRandom to an independent generator for the
+                        following modules.  E.g. a module chain of the sort
+                        [ParticleGun -> RandomBarrier -> FullSim] would use one
+                        RNG instance for the ParticleGun, and another for
+                        FullSim and all following modules. You may find this
+                        useful if you want to change the simulation, but don't
+                        want differences to affect the particle generation.  The
+                        output is equivalent to saving the output of ParticleGun
+                        in a file, and reading it again to do the simulation.
+                        Correct separation is not provided for terminate(),
+                        don't use random numbers there.
+RootInput               Reads objects/arrays from one or more .root files saved
+                        by the RootOutput module and makes them available
+                        through the DataStore. Files do not necessarily have to
+                        be local, http:// and root:// (for files in xrootd) URLs
+                        are supported as well.
+RootOutput              Writes DataStore objects into a .root file. Data is
+                        stored in a TTree 'tree' for event-dependent and in
+                        'persistent' for peristent data. You can use RootInput
+                        to read the files back into basf2.
+SeqRootInput            Read .sroot files produced by SeqRootOutput.
+SeqRootOutput           Save a sequential ROOT file (non-standard I/O format
+                        used in DAQ). See https://confluence.desy.de/display/BI/
+                        Software+PersistencyModules for further information and
+                        a comparison with the .root format.
+ToFileLogger            For better handling of non BASF2-Logging (e.g. cout or
+                        printf()), you can insert this module. It redirects all
+                        output to the console into the filename given as
+                        parameter. Using the basf2-own logging framework
+                        (logging.add_file()) you can even write the
+                        basf2-related logginginto a separate file.
+
+                                   generators                                   
+AafhInput               AAFH Generator to generate non-radiative two-photon
+                        events like e+e- -> e+e-e+e-
+BBBremInput             Generates low scattering angle radiative Bhabha events
+                        (Beam-Beam Bremsstrahlung).
+BHWideInput             Generates radiative BhaBha scattering events with
+                        BHWide.
+BabayagaNLOInput        Generates radiative Bhabha scattering and exclusive two-
+                        photon events with Babayaga.NLO.
+BeamParameters          Setting of beam parameters. This module allows to set
+                        the beamparameters to be used by generators and analyis.
+                        One can either select from a list of predefined
+                        parameter sets or manually set the parameters to use.
+CRYInput                Generates cosmic showers with CRY
+Cosmics                 cosmics generator to generate cosmic ray tracks
+EvtGenInput             EvtGenInput module. The module is served as an interface
+                        for EvtGen Event Generator so that the EvtGen generator
+                        can store the generated particles into MCParticles. The
+                        users need to provide their own decay mode based on the
+                        standard DECAY.DEC.
+Fragmentation           Fragmention of (u/d/s/c) quarks using PYTHIA8
+GeneratorPreselection   Preselection based on generator truth information
+HepevtInput             HepEvt file input. This module loads an event record
+                        from HEPEVT format and store the content into the
+                        MCParticle collection. HEPEVT format is a standard event
+                        record format to contain an event record in a Monte
+                        Carlo-independent format.
+HepevtOutput            HepEvt file output. This module loads an event record
+                        from the MCParticle collection and store the content
+                        back into the HEPEVT format. HEPEVT format is a standard
+                        event record format to contain an event record in a
+                        Monte Carlo-independent format.
+KKGenInput              KKGenInput module. This an interface for KK2f Event
+                        Generator for basf2. The generated events are stored
+                        into MCParticles. You can find an expample of its decay
+                        file (tau_decaytable.dat) for tau-pair events at
+                        ${BELLE2_RELEASE_DIR}/data/generators/kkmc. On the other
+                        hand, when you like to generate mu-pair events,
+                        ${BELLE2_RELEASE_DIR}/data/generators/kkmc/mu.input.dat
+                        should be set to tauinputFile in your steering file.
+KoralWInput             Generates four fermion final state events with KoralW.
+LHEInput                LHE file input. This module loads an event record from
+                        LHE format and store the content into the MCParticle
+                        collection. LHE format is a standard event record format
+                        to contain an event record in a Monte Carlo-independent
+                        format.
+ParticleGun             Particle gun to generate simple tracks.
+                        This module allows to generate simple events where all
+                        tracks have the same
+                        momentum, angular and vertex distributions.  Several
+                        distributions are
+                        available for momentum, phi, theta and vertex position
+                        generation:
+                        - fixed:       Fixed value, only one parameter has to be
+                        specified: [value]
+                        - uniform:     Uniform between two given values: [min,
+                        max]
+                        - uniformPt:   Generate flat transverse momentum pt:
+                        [min_pt, max_pt]
+                        - uniformCos:  Generate uniformly in the cosine, e.g.
+                        flat in cos(theta).
+                                       Parameters are still the minimum and
+                        maximum angle (not
+                                       cos()): [min_theta, max_theta]
+                        - normal:      Normal (Gaussian) distributed: [mean,
+                        width]
+                        - normalPt:    Generate normal distributed transverse
+                        momentum pt: [mean_pt, width_pt]
+                        - normalCos:   Generate normal distributed cosine of the
+                        angle: [mean, width]
+                        - polyline:    Generate according to a pdf given as
+                        polyline, first the sorted x
+                                       coordinates and then the non-negative y
+                        coordinates:
+                                       [x1, x2, x3, ... xn, y1, y2, y3, ..., yn]
+                        - polylinePt:  Like polyline but for pt, not p
+                        - polylineCos: Like polyline, but for the cos(), not the
+                        absolute value
+                        - inversePt:   Generate uniformly in the inverse of pt,
+                        that is uniform in
+                                       track curvature: [min_pt, max_pt]
+                        - discrete:    Discrete Spectrum given as a list of
+                        weights and values:
+                                       [weight1, value1, weight2, value2, ...]
+                                       (useful for radiactive sources)
+                        - discretePt:  same as above but for transverse momentum
+PhokharaInput           Generates radiative return events with PHOKHARA.
+PrintMCParticles        Print an MCParticle List
+PrintTauTauMCParticles  Print an MCParticle Collection
+RemoveMCParticles       Remove particles from the MCParticle Collection.
+                         BEWARE: At the moment, Relations to that MCParticle
+                        collection will become invalid and are not fixed
+                        automatically
+SADInput                Reads the SAD data from a root file and stores it into
+                        the MCParticle collection.
+SmearPrimaryVertex      Smears primary vertex and all subsequent vertices in a
+                        MCParticle Collection
+TeeggInput              Generates events with TEEGG.
+TouschekTURTLEInput     Reads the Touschek data from a TURTLE file and stores it
+                        into the MCParticle collection.
+
+                                    geometry                                    
+CreateFieldMap          Create Field maps of the Belle II magnetic field used in
+                        the simulation
+ExportGeometry          Saves the Belle II detector geometry to a root or GDML
+                        file. GDML support is only available if Geant4 has been
+                        compiled with GDML enabled. This requires the xerces XML
+                        parser headers to be installed when compiling the
+                        externals
+FBXWriter               Write the detector geometry in a (semi-)hierarchical FBX
+                        format.
+Geometry                Setup geometry description
+OverlapChecker          Checks the geometry for overlaps.
+VRMLWriter              Write the detector geometry in a hierarchical VRML
+                        format.
+
+                                      hlt                                       
+CosmicRayHLTDQM         Monitor recontruction of cosmic ray on HLT
+FillHLTTag              skim physics processes
+L1Emulation             L1 emulator for the study of L1 trigger
+L1EmulationPrint        L1 emulator for printing the result of L1 trigger
+Level3                  Level3 is the Level-3 software trigger module.
+PhysicsTrigger          skim physics processes
+PhysicsTriggerDQM       Monitor Physics Trigger
+SoftwareTrigger         Module to perform cuts on various variables in the
+                        event. The cuts can be definedby elements loaded from
+                        the database. Each cut is executed and its result
+                        stored.The return value of this module is an integer,
+                        which is:
+                        if reject is more important than accept:* 1: if one of
+                        the accept cuts has a true result and none of the reject
+                        cuts is false ( = accepted)
+                        * 0: if neither one of the accept cuts is true nor one
+                        of the reject cuts false ( = don't know)
+                        * -1: if one of the reject cuts is false ( = rejected)
+                        Please note that the reject cuts override the accept
+                        cuts decision in this case!
+                        if accept is more important than reject:
+                        * 1: if one of the accept cuts has a true result. ( =
+                        accepted)
+                        * 0: if neither one of the accept cuts is true nor one
+                        of the reject cuts false ( = don't know)
+                        * -1: if one of the reject cuts is false and none of the
+                        accept cuts is true ( = rejected)
+                        Please note that the accept cuts override the reject
+                        cuts decision in this case!What is more important can be
+                        controlled by the flag acceptOverridesReject, which is
+                        off by default (so reject is more important than accept
+                        by default).
+SoftwareTriggerDQM      Monitor Physics Trigger
+
+                                      mva                                       
+MVAExpert               Adds an ExtraInfo to the Particle objects in given
+                        ParticleLists which is calcuated by an expert defined by
+                        a weightfile.
+MVAMultipleExperts      Adds ExtraInfos to the Particle objects in given
+                        ParticleLists which is calcuated by multiple experts
+                        defined by the given weightfiles.
+
+                                      pxd                                       
+PXDBackground           PXD background module
+PXDBeamBackHitFilter    This module filters out from the BeamBackHits StoreArray
+                        the BeamBackHits not related to PXD.
+PXDClusterCheck         This Modules compares to sets of clusters and their
+                        relations to make sure they are identical. Intended to
+                        cross check Clusterizer. Default Collection names are
+                        assumed for MCParticles, PXDTrueHits and PXDDigits
+PXDClusterizer          Cluster PXDHits
+PXDDQM                  PXD DQM module
+PXDDQMCorr              PXD DQM Correlation module
+PXDDigitSorter          This module sorts the existing PXDDigits collection and
+                        also updates the corresponding Relation to MCParticles
+                        and TrueHits. This is needed for unsorted pixel data as
+                        the Clusterizer expects sorted input.
+PXDDigitizer            Digitize PXDSimHits
+PXDHardwareClusterDQM   Monitor PXD hardware cluster
+PXDHardwareClusterUnpacker Unpack Raw PXD Cluster from ONSEN data stream
+PXDPacker               Pack PXD Hits to raw data object
+PXDROIDQM               Monitor ROIs
+PXDRawDQM               Monitor raw PXD
+PXDRawDQMChips          Monitor raw PXD
+PXDRawDQMCorr           PXD DQM Correlation module
+PXDRawHitProducer       This module converts the input collection of PXDDigits
+                        into a collection of PXDRawHits, and assigns the raw
+                        hits randomly to frames.
+PXDRawHitSorter         This module converts the input collection of PXDRawHits
+                        into a collection of PXDDigits sorted, for each half-
+                        ladder, by frame, row,and column.
+PXDReadRawDHH           Read a Raw PXD-Data Dump from DHH (or a simulator) and
+                        stores it as RawDHH in Data Store
+PXDReadRawONSEN         Read a Raw PXD-Data Dump from ONSEN (or a simulator) and
+                        stores it as RawPXD in Data Store
+PXDTriggerFixer         Find PXD data for event which has been shifted by offset
+PXDUnpacker             Unpack Raw PXD Hits from ONSEN data stream
+PXDUnpackerDHH          Unpack Raw PXD Hits from ONSEN data stream
+PXDUnpackerDQM          Monitor Unpacker errors
+pxdApplyClusterShapeCorrection Apply PXD Cluster Shape Calibration
+pxdCheckClusterShapeCorrection Apply PXD Cluster Shape Calibration
+pxdClusterShapeCalibration PXD Cluster Shape Calibration
+
+                                    rawdata                                     
+CheckErrorEvent         Encode DataStore into RingBuffer
+Convert2RawDet          convert from RawCOPPER or RawDataBlock to RawDetector
+                        objects
+DummyDataPacker         an Example to pack data to a RawCOPPER object
+MakeDumHSLBData         Encode DataStore into RingBuffer
+PrintData               Encode DataStore into RingBuffer
+PrintDataTemplate       Encode DataStore into RingBuffer
+PrintEventRate          Encode DataStore into RingBuffer
+Root2Binary             Encode DataStore into RingBuffer
+
+                                 reconstruction                                 
+CDCDedxCosineCollector  A collector module for CDC dE/dx cosine calibration
+CDCDedxPID              Extract dE/dx and corresponding log-likelihood from
+                        fitted tracks and hits in the CDC.
+CDCDedxRunGainCollector A collector module for CDC dE/dx run gain calibration
+CDCDedxScan             Extract dE/dx and corresponding log-likelihood from
+                        fitted tracks and hits in the CDC, SVD and PXD.
+CDCDedxWireGainCollector A collector module for CDC dE/dx wire gain calibration
+ClusterMatcher          Match KLM cluster to ECL Clusters within a certain cone.
+CombinedPIDPerformance  This module evaluates the combined PID performance
+DataWriter              Used to write flat ntuple for KlId classifier trainings
+                        for both ECL and KLM KlID. Output is a root file.
+DedxCorrection          Apply hit level corrections to the dE/dx measurements.
+DedxSkim                Apply clean up cuts for dE/dx purposes.
+HitLevelInfoWriter      Extract dE/dx information for calibration development.
+KLMExpert               Use to calculate KlId for each KLM cluster.
+KlongValidation         Used to calculate validation variables for Klong
+                        efficiency validations etc...
+MdstPID                 Create MDST PID format (PIDLikelihood objects) from
+                        subdetector PID info.
+PIDNtuple               Writes a flat ntuple of PIDLikelihoods with track info
+                        into a root file
+VXDDedxPID              Extract dE/dx and corresponding log-likelihood from
+                        fitted tracks and hits in the SVD and PXD.
+
+                                   simulation                                   
+FullSim                 Performs the full Geant4 detector simulation. Requires a
+                        valid geometry in memory.
+FullSimTiming           Provide more detailed timing info for FullSim module
+MaterialScan            This Module is intended to scan the material budget of
+                        the geometry.  Currently, there are two different kinds
+                        of scans available: Spherical and Planar scan.
+                        Spherical scan will shoot rays from the origin of the
+                        detector and scan along the polar and azimuth angle.
+                        Planar scan will shoot rays perpendicular to a given
+                        plane.
+
+                                      svd                                       
+SVDBackground           SVD background module
+SVDBeamBackHitFilter    This module filters out from the BeamBackHits StoreArray
+                        the BeamBackHits not related to SVD.
+SVDClusterizer          Clusterize SVDDigits and reconstruct hits
+SVDDQM                  SVD DQM module
+SVDDQM2                 SVD DQM 2 module
+SVDDigitSorter          This module sorts and filters the existing SVDDigits
+                        collection and also updates the corresponding Relation
+                        to MCParticles and TrueHits. This is needed for unsorted
+                        strip data as the Clusterizer expects sorted input.The
+                        module is generally not required for simulation, as
+                        SVDDigitzer outputsa properly sorted digit collection.
+SVDDigitizer            Create SVDDigits from SVDSimHits
+SVDPacker               Not set by the author
+SVDSpacePointCreator    Imports Clusters of the SVD detector and converts them
+                        to spacePoints.
+SVDUnpacker             Produce SVDDigits from RawSVD. NOTE: only zero-
+                        suppressed mode is currently supported!
+svdDump                 Module to create SVD data file
+
+                                      top                                       
+OpticalGun              Source of optical photons
+TOPAligner              Alignment of TOP
+TOPBackground           A module to analyze beam background simulations
+                        regarding TOP
+TOPBunchFinder          Bunch finder
+TOPChannelMasker        Masks dead PMs from the reconstruction
+TOPCommonT0Calibrator   On-line common T0 calibrator (under development!)
+TOPCosmicT0Finder       Event T0 finder for global cosmic runs
+TOPDQM                  TOP DQM histogrammer
+TOPDataQualityOnline    TOPCAF online monitoring module
+TOPDigitizer            Digitize TOPSimHits
+TOPDoublePulseGenerator Generator of calibration double pulses
+TOPInterimFENtuple      TOP data analysis module for Interim FE firmware (since
+                        Jan, 2017), to be used to produce an NTuple with the
+                        basic TOPDigis and TOPRawDigits informations.
+TOPLaserCalibrator      iTOP Calibration using the laser calibration system
+TOPMCTrackMaker         Constructs Tracks and ExtHits from MCParticles and
+                        TOPBarHits. Utility needed for testing and debugging of
+                        TOP reconstruction.
+TOPNtuple               Writes ntuple of TOPLikelihoods with tracking info into
+                        a root file
+TOPPacker               Raw data packer for TOP
+TOPRawDigitConverter    Converts row digits to digits and applies time
+                        calibration
+TOPReconstructor        Reconstruction for TOP counter. Uses reconstructed
+                        tracks extrapolated to TOP and TOPDigits to calculate
+                        log likelihoods for charged stable particles
+TOPTimeBaseCalibrator   Sample time calibrator
+TOPUnpacker             Raw data unpacker for TOP
+TOPWFCalibrator         Calibration of waveforms (under development)
+TOPWFMerger             Module merges raw waveforms, performs pedestal
+                        subtraction and gain correction, and converts waveforms
+                        to hits.
+TOPWaveformFeatureExtractor Module adds raw digits that are found in waveforms
+                        but not already present in TOPRawDigits. Only waveforms
+                        related to TOPRawDigits are used.
+TOPWaveformQualityPlotter TOP DQM histogram module
+
+                                    tracking                                    
+BestVXDTrackCandidatesSelector Module that selects a subset with a fixed size x
+                        out of all SpacePointTrackCandidates. Based on
+                        qualityIndex.
+CDCToVXDExtrapolator    For the given track collection input, finds the set of
+                        CDC-only tracks, tries to find VXD hits compatible with
+                        the tracks.
+CKFCdcToVxd             For the given track collection input, finds the set of
+                        CDC-only tracks, tries to find VXD hits compatible with
+                        the tracks.
+CollectorTest           CollectorTest.
+CurlingTrackCandSplitter Module for checking SpacePointTrackCands for curling
+                        behaviour and (if wanted) splitting them into
+                        SpacePointTrackCands that no longer show curling
+                        behaviour. WARNING: MODULE IS DEPRECATED use SPTCReferee
+                        instead!
+DAFRecoFitter           DAF Fitter using Genfit. If you have TrackCands, you
+                        have to convert them to RecoTracksusing the
+                        RecoTrackCreatorModule first. After that, you probably
+                        want to add the measurements from thehits using the
+                        MeasurementCreatorModule.
+EffPlots                This module makes some plots related to V0 and saves
+                        them into a root file. For the efficiency plots:
+                        _noGeoAcc -> normalized to MCParticles; _withGeoAcc ->
+                        normalized to RecoTracks.
+EventCounter            Highlights current event and does some minimal
+                        statistics for VXD Clusters
+ExportSectorMap         imports xml-files of sectorMaps and exports RAM-friendly
+                        versions of it
+Ext                     Extrapolates tracks from CDC to outer detectors using
+                        geant4e
+FastBDTClassifierAnalyzer analyzes performance of given FastBDT on a test and a
+                        training set and determines a global classification cut.
+                        TODO
+FastBDTClassifierTraining TODO
+FilterBasedVXDCDCTrackMerger This module merges tracks which are reconstructed,
+                        separately, in the silicon (PXD+VXD) and in the CDC
+FilterCalculator        This module calculates the relations of sectors and
+                        exports sector dependent filtervalues. Size of sectors
+                        and type of filters can be set by steering file. Only
+                        one track per event, needs many events for usefull
+                        outcome.
+FittedTracksStorer      Not set by the author
+FullGridTrackTimeExtraction Build the full covariance matrix for RecoTracks and
+                        extract the event time using the CDC drift time
+                        information.
+GFTC2SPTCConverter      Module for converting genfit::TrackCands (e.g. from
+                        TrackFinderMCTruth) to SpacePointTrackCands.
+GenFitter               Uses GenFit2 to fit tracks. Needs genfit::TrackCands as
+                        input and provides genfit::Tracks and Tracks as output.
+GenfitTrackCandidatesCreator Module turning reco tracks to genfit tracks (will
+                        be unneeded once we use reco tracks everywhere).
+GenfitTrackCreator      Module turning reco tracks to genfit tracks (will be
+                        unneeded once we use reco tracks everywhere).
+GenfitVis               Visualize genfit::Tracks using the genfit::EventDisplay.
+IPTrackTimeEstimator    Module estimating the track time of RecoTracks - before
+                        or after the fit. Loops over all RecoTracks and set
+                        their time seed correctly. In case of using the fitted
+                        information,it also sets the track seeds of the position
+                        and momentum into the first measurement (where the time
+                        seedis calculated). It also deletes all fitted
+                        information. Do not forget to refit the tracks
+                        afterwards.
+KalmanRecoFitter        Kalman Fitter using Genfit. If you have TrackCands, you
+                        have to convert them to RecoTracksusing the
+                        RecoTrackCreatorModule first. After that, you probably
+                        want to add the measurements from thehits using the
+                        MeasurementCreatorModule.
+MCRecoTracksMatcher     This module compares reconstructed tracks generated by
+                        some pattern recognition algorithm for PXD, SVD and/or
+                        CDC to ideal Monte Carlo tracks and performs a matching
+                        from the former to the underlying MCParticles.
+MCTrackCandClassifier   This module is meant to classify the MCTrackCands as
+                        either ideal, fine and nasty
+MCTrackCandCombiner     Uses the MC information to create
+                        genfit::TrackCandidates for primary MCParticles and
+                        Relations between them.  Fills the created
+                        genfit::TrackCandidates with all information (start
+                        values, hit indices) needed for the fitting.
+MCV0Matcher             A module matching the V0s found by the V0Finder with
+                        MCParticles
+MLSegmentNetworkProducer SegmentNetwork Producer Module with a machine learning
+                        classifier as three hit filter.
+Muid                    Identifies muons by extrapolating tracks from CDC to KLM
+                        using geant4e
+NonRootDataExport       allows export of various data objects into files
+PXDDataRedAnalysis      This module performs the analysis of the
+                        PXDDataReduction module output
+PXDDataReduction        This module performs the reduction of the PXD data
+                        output
+PXDdigiFilter           The module produce a StoreArray of PXDDigit inside the
+                        ROIs.
+PhaseSpaceAnalysis      Module for analysing the phase space covered by
+                        TrackCands (resp. their related MCParticles)
+PlaneTriggerTrackTimeEstimator Module estimating the track time of RecoTracks -
+                        before or after the fit. Loops over all RecoTracks and
+                        set their time seed correctly. In case of using the
+                        fitted information,it also sets the track seeds of the
+                        position and momentum into the first measurement (where
+                        the time seedis calculated). It also deletes all fitted
+                        information. Do not forget to refit the tracks
+                        afterwards.
+PruneGenfitTracks       Prunes genfit tracks
+PruneRecoTracks         Prunes RecoTracks.
+QualityEstimatorVXD     The quality estimator module for
+                        SpacePointTrackCandidates.
+ROIDQM                  Monitor of the  ROIs creation on HLT
+ROIGenerator            This module is used to generate a certain number of ROIs
+ROIPayloadAssembler     This module assembles payload for the ROI in the correct
+                        format to be sent to the ONSEN
+ROIReadTest             check the payload produced by the ROIPayloadAssembler
+                        Module
+ROISender               Send the ROI payload to the external ring buffer
+RT2SPTCConverter        Module for converting RecoTracks (e.g. from
+                        TrackFinderMCTruth) to SpacePointTrackCands.
+RadiusTrackTimeEstimator Module estimating the track time of RecoTracks - before
+                        or after the fit. Loops over all RecoTracks and set
+                        their time seed correctly. In case of using the fitted
+                        information,it also sets the track seeds of the position
+                        and momentum into the first measurement (where the time
+                        seedis calculated). It also deletes all fitted
+                        information. Do not forget to refit the tracks
+                        afterwards.
+RawSecMapMerger         this module takes a root file containing a raw sectorMap
+                        created by the SecMapTrainerBaseModule and converts it
+                        to a sectormap which can be read by the VXDTF. Please
+                        check the parameters to be set...
+RawSecMapMergerWithSpacePoints this module takes a root file containing a raw
+                        sectorMap created by the SecMapTrainerBaseModule and
+                        converts it to a sectormap which can be read by the
+                        VXDTF. Please check the parameters to be set...
+RecoTrackCreator        Converts the given genfit::TrackCands in the StoreArray
+                        to RecoTracks for further use in the fitter.
+SPTC2GFTCConverter      Module for converting SpacePointTrackCand to
+                        genfit::TrackCand.
+SPTC2RTConverter        Converts the given SpacePointTrackCandidates to
+                        RecoTracks and stores them in the given
+                        RecoTracksStoreArray
+SPTCReferee             Module that does some sanity checks on
+                        SpacePointTrackCands to prevent some problematic cases
+                        to be forwarded to other modules that rely on
+                        'unproblematic' cases (e.g. FilterCalculator). Different
+                        checks can be enabled by setting the according flags.
+                        Using MC information for the tests can also be switched
+                        on/off for tests where MC information can be helpful.
+SPTCmomentumSeedRetriever A module for creating momentum seeds for spacepoint
+                        track candidates.
+SPTCvirtualIPRemover    The quality estimator module for
+                        SpacePointTrackCandidates using a circleFit.
+SVDOverlapChecker       Module checks for overlaps of SpacePointTrackCands and
+                        stores them in an OverlapNetwork, which is basically a
+                        matrix of overlaps.
+SVDOverlapResolver      Module checks for overlaps of SpacePointTrackCands
+SecMapTrainerBase       this module analyzes a big number of events (pGun or
+                        evtGen) to create raw sectorMaps which are needed for
+                        the VXDTF 2.0. This information will be exported via
+                        root files.
+SecMapTrainerVXDTF      this module analyzes a big number of events (pGun or
+                        evtGen) to create raw sectorMaps which are needed for
+                        the VXDTF. This information will be exported via root
+                        files.
+SecMapTrainerWithSpacePoints this module analyzes a big number of events (pGun
+                        or evtGen) to create raw sectorMaps which are needed for
+                        the VXDTF. This information can be exported via ascii
+                        files (not recommended) and root files (default,
+                        recommended).
+SectorMapBootstrap      Create the VXDTF SectorMap for the following modules.
+SegmentNetworkAnalyzer  Module for analyzing the SegmentNetwork.
+SegmentNetworkProducer  The segment network producer module.
+                         This module takes a given sectorMap and storeArrays of
+                        spacePoints and creates a segmentNetwork (if activated).
+                        The output: a StoreObjPtr of
+                        DirectedNodeNetworkContainer:
+                         - will contain a DirectedNodeNetwork< ActiveSector> (if
+                        parameter 'createNeworks' is [1;3])
+                         - will contain a DirectedNodeNetwork< SpacePoint > (if
+                        parameter 'createNeworks' is  [2;3])
+                         - will contain a DirectedNodeNetwork< Segment > (if
+                        parameter 'createNeworks' is [3])
+SelectionForTrackTimeExtraction Select RecoTracks for later track time
+                        extraction and copy them to another store array.Will
+                        clean the old reco tracks store array afterwards, if the
+                        parameter is set to do so.
+SetupGenfitExtrapolation Sets up material handling for genfit extrapolation.
+                        Also setups up I/O streams for genfit in order to
+                        integrate it into basf2 logging system. Also sets up
+                        update of VXDAlignment from DB (temporary).
+SpacePoint2TrueHitConnector Module that tries to find the appropriate TrueHit to
+                        each SpacePoint and to register a relation between them
+                        for making MC information for SpacePoints more easily
+                        accesible for Modules that need it. Module can also be
+                        used to filter out 'fishy' SpacePoints.
+SpacePointCreatorPXD    Imports Clusters of the PXD detector and converts them
+                        to spacePoints.
+SpacePointCreatorSVD    Imports Clusters of the SVD detector and converts them
+                        to spacePoints.
+SpacePointCreatorTest   Tester module for the validity of the
+                        SpacePointCreatorModule. TODO: at the moment, the
+                        genfit-output can only verified visually (by checking,
+                        whether the detector types match the number of
+                        dimensions stored in the trackPoint)! when full reco
+                        chain is working, this testerModule should be extended!
+                        -> verification that input cluster(s) is/are converted
+                        to genfit-stuff shall be resilient!
+StandardTrackingPerformance Module to test the tracking efficiency. Writes
+                        information about the tracks and MCParticles in a ROOT
+                        file.
+StudyMaterialEffects    StudyMaterialEffects- should be used with single track
+                        pGuns and without magnetic field.
+TBAnalysis              This module performs the on-site offline analysis of VXD
+                        TB data
+TCConvertersTest        Module for testing the functionality of the TrackCand
+                        converter modules and their underlying classes.
+TFAnalizer              analyzes quality of cell-o-mat versus mcTrackFinder
+TFCDC_AxialSegmentPairCreator Findlet: Creates axial axial segment pairs from a
+                        set of segments filtered by some acceptance criterion
+TFCDC_AxialTrackCreatorMCTruth Findlet: Constructs tracks from wire hits using
+                        the mc truth information.
+TFCDC_AxialTrackCreatorSegmentHough Findlet: Generates axial tracks from
+                        segments using a hough space over phi0 impact and
+                        curvature for the spares case.
+TFCDC_AxialTrackFinderHough Findlet: Generates axial tracks from hits using
+                        several increasingly relaxed hough space search over
+                        phi0 and curvature.
+TFCDC_AxialTrackFinderLegendre Findlet: Performs the pattern recognition in the
+                        CDC with the legendre hough finder
+TFCDC_ClusterBackgroundDetector Findlet: Marks clusters as background if the
+                        used filter detectes them as such
+TFCDC_ClusterPreparer   Findlet: Clusters the wire hits in the CDC to form
+                        locally connected groups with two granularities.
+TFCDC_ClusterRefiner    Findlet: Breaks bigger wire hit super cluster into
+                        smaller wire hit clusters
+TFCDC_CosmicsTrackMerger Findlet: Merge cosmics tracks based on different filter
+                        criteria. It assumes that there is only cosmics one
+                        track in the event.
+TFCDC_FacetCreator      Findlet: Creates hit triplet (facets) from each cluster
+                        filtered by a acceptance criterion.
+TFCDC_SegmentCreatorFacetAutomaton Findlet: Constructs segments by extraction of
+                        facet paths in a cellular automaton.
+TFCDC_SegmentCreatorMCTruth Findlet: Constructs segments from wire hits using
+                        the mc truth information.
+TFCDC_SegmentFinderFacetAutomaton Findlet: Generates segments from hits using a
+                        cellular automaton build from hit triples (facets).
+TFCDC_SegmentFitter     Findlet: Fits each segment with a selectable method
+TFCDC_SegmentLinker     Findlet: Links segments by extraction of segment paths
+                        in a cellular automaton.
+TFCDC_SegmentOrienter   Findlet: Fixes the flight direction of segments to a
+                        preferred orientation by simple heuristics.
+TFCDC_SegmentPairCreator Findlet: Creates axial stereo segment pairs from a set
+                        of segments filtered by some acceptance criterion
+TFCDC_SegmentRejecter   Findlet: Deletes fake segments that have been rejected
+                        by a filter
+TFCDC_SegmentTrackCombiner Findlet: Findlet for the combination of tracks and
+                        segments.
+TFCDC_SegmentTripleCreator Findlet: Creates segment triples from a set of middle
+                        segments and already combined axial segment pairs
+                        filtered by some acceptance criterion
+TFCDC_StereoHitFinder   Findlet: Tries to add CDC stereo hits to the found CDC
+                        tracks by applying a histogramming method with a quad
+                        tree.
+TFCDC_SuperClusterCreator Findlet: Groups the wire hits into super cluster by
+                        expanding the secondary wire neighborhood
+TFCDC_TrackCombiner     Findlet: Combines two sets of tracks to one final set by
+                        merging tracks that have large overlaps.
+TFCDC_TrackCreatorSegmentPairAutomaton Findlet: Constructs tracks by extraction
+                        of segment pair paths in a cellular automaton.
+TFCDC_TrackCreatorSegmentTripleAutomaton Findlet: Constructs tracks by
+                        extraction of segment triple paths in a cellular
+                        automaton.
+TFCDC_TrackCreatorSingleSegments Findlet: Creates a track for each segments that
+                        is yet unused by any of the given tracks.
+TFCDC_TrackExporter     Findlet: Creates a RecoTrack from each CDCTrack.
+TFCDC_TrackFinderAutomaton Performs patter recognition in the CDC based on local
+                        hit following and application of a cellular automaton in
+                        two stages.
+TFCDC_TrackFinderCosmics Performs patter recognition in the CDC based on local
+                        hit following and application of a cellular automaton in
+                        two stages - version suitable for cosmics.
+TFCDC_TrackFinderSegmentPairAutomaton Findlet: Generates tracks from segments
+                        using a cellular automaton built from segment pairs.
+TFCDC_TrackFinderSegmentTripleAutomaton Findlet: Generates tracks from segments
+                        using a cellular automaton built from segment triples.
+TFCDC_TrackFlightTimeAdjuster Findlet: Adjusts the flight time of tracks
+                        relative to the flight time zero location
+TFCDC_TrackLinker       Findlet: Links tracks by extraction of track paths in a
+                        cellular automaton.
+TFCDC_TrackOrienter     Findlet: Fixes the flight direction of tracks to a
+                        preferred orientation by simple heuristics.
+TFCDC_TrackQualityAsserter Findlet: Many tracks in the CDC can not be fitted.
+                        For fitting them, we remove parts of the hits or maybe
+                        the whole track.
+TFCDC_TrackRejecter     Findlet: Deletes fake tracks that have been rejected by
+                        a filter
+TFCDC_WireHitCreator    Findlet: Combines the geometrical information and the
+                        raw hit information into wire hits, which can be used
+                        from all modules after that
+TFCDC_WireHitPreparer   Findlet: Combine the CDCHits from the DataStore with the
+                        geometry information.
+ThreeHitSamplesGenerator Module for generating training data samples. WARNING:
+                        currently under development!
+TrackBuilder            Build TrackFitResults. Needs genfit::TrackCands and
+                        genfit::Tracks as input, creates Belle2::Tracks and
+                        Belle2::TrackFitResults as output.
+TrackCreator            Build Tracks with the TrackFitResults. Needs RecoTracks
+                        as input, creates Belle2::Tracks and
+                        Belle2::TrackFitResults as output.
+TrackFinderMCTruthRecoTracks Uses the MC information to create
+                        genfit::TrackCandidates for primary MCParticles and
+                        Relations between them. Fills the created
+                        genfit::TrackCandidates with all information (start
+                        values, hit indices) needed for the fitting.
+TrackFinderVXDAnalizer  analyzes quality of SpacePointTrackCands delivered by a
+                        test-TF compared to a reference TF
+TrackFinderVXDBasicPathFinder The TrackFinderVXD BasicPathFinder module.
+                         It uses the output produced by the
+                        SegmentNetworkProducerModule to create
+                        SpacePointTrackCands by simply storing all possible
+                        paths stored in the SegmentNetwork.
+TrackFinderVXDCellOMat  The TrackFinderVXD Cell-O-Mat module.
+                         It uses the output produced by the
+                        SegmentNetworkProducerModule to create
+                        SpacePointTrackCands using a Cellular Automaton
+                        algorithm implementation.
+TrackSetEvaluatorGreedyDEV Expects a container of SpacePointTrackCandidates,
+                        selects a subset of non-overlapping TCs using the Greedy
+                        algorithm.
+TrackSetEvaluatorHopfieldNNDEV This module expects a container of
+                        SpacePointTrackCandidates and an OverlapNetwork
+                        and thenselects a subset of non-overlapping TCs
+                        determined using a neural network of Hopfield type.
+TrackTimeExtraction     Build the full covariance matrix for RecoTracks.
+TrackingPerformanceEvaluation This module evaluates the tracking package
+                        performance
+V0Finder                This is a simple V0 finder which matches all positive
+                        tracks with all negative tracks, fitting a vertex for
+                        each pair.  Depending on the outcome of each fit, a
+                        corresponding Belle2::V0 is stored or not.
+
+                        Inside the beam pipe (cut determined by the option
+                        'beamPipeRadius') a loose chi2 cut is applied
+                        ('vertexChi2CutInside') and, since all tracks coming
+                        from a single B decay will actually fit into a vertex,
+                        an additional mass cut restricting to Kshorts is applied
+                        ('massWindowKshortInside').
+
+                        Outside the beam pipe only a chi^2 cut is applied
+                        ('vertexChi2CutOutside').
+V0findingPerformanceEvaluation This module evaluates the V0 finding package
+                        performance
+VXDCDCTrackMerger       This module merges tracks which are reconstructed,
+                        separately, in the silicon (PXD+VXD) and in the CDC
+VXDSimpleClusterizer    The VXDSimpleClusterizerModule generates PXD/SVD
+                        Clusters using TrueHits. Energy-deposit threshold and
+                        gaussian smearing can be chosen, non-primary-particles
+                        can be filtered as well. Its purpose is fast
+                        clusterizing for tracking test procedures, using
+                        standardized PXD/SVD-Cluster
+VXDTF                   Trackfinder for the SVD using cellular automaton
+                        techniques, kalman filter (genfit) and a hopfield
+                        network as well.
+VXDTFTrainingDataCollector This module collect the data needed to train the
+                        VXDTF sector map. The data are saved on a root file that
+                        eventually will be chained and used by the training
+                        module.
+VXDTrackCandidatesQualityIndexCutter Module that selects a subset out of all
+                        SpacePointTrackCandidates. Based on qualityIndex
+                        requirement.
+
+                                      trg                                       
+CDCTrigger2DFinder      Hough tracking algorithm for CDC trigger.
+CDCTrigger2DFitter      The 2D fitter module of the CDC trigger.
+                        Performs a circle fit on a given set of axial
+                        CDCTriggerSegmentHits.
+                        Requires a preceding track finder to sort hits to
+                        tracks.
+CDCTrigger3DFitter      The 3D fitter module of the CDC trigger.
+                        Selects stereo hits around a given 2D track and performs
+                        a linear fit in the s-z plane (s: 2D arclength).
+CDCTriggerETF           The Event Time Finder module of the CDC trigger.
+                        Uses fastest time of CDCTriggerSegmentHits to find the
+                        event time.
+CDCTriggerMCMatcher     A module to match CDCTriggerTracks to MCParticles.
+                        Creates an array MCTracks of trackable MCParticles and
+                        makes relations from MCTracks to CDCTriggerTracks and
+                        vice-versa.
+CDCTriggerNeuro         The NeuroTrigger module of the CDC trigger.
+                        Takes track segments and 2D track estimates as input and
+                        estimates
+                        the z-vertex for each track using a neural network.
+                        Requires one or several trained networks stored in a
+                        file.
+CDCTriggerNeuroTrainer  The NeuroTriggerTrainer module of the CDC trigger.
+                        Takes track segments and 2D track estimates to prepare
+                        input data
+                        for the training of a neural network.
+                        Networks are trained after the event loop and saved.
+
+                        Data preparation is done in two steps:
+                        1. The MLP uses hits from a limited range around the 2D
+                        track. To find this range, a histogram with the distance
+                        of hits to the 2D track is prepared. The relevant ID
+                        range is determined by a threshold on the hit counters
+                        or on the sum of the hit counters over the relevant
+                        range.
+                        2. Input data is calculated from the hits, the 2D tracks
+                        and the ID ranges. Target data is collected from a
+                        MCParticle or RecoTrack related to the 2D track.
+CDCTriggerRecoMatcher   A module to match CDCTriggerTracks to RecoTracks.
+                        First makes relations from RecoTracks to
+                        CDCTriggerSegmentHits, then makes relations from
+                        RecoTracks to CDCTriggerTracks and vice-versa.
+CDCTriggerTSF           The Track Segment Finder module of the CDC trigger.
+                        Combines CDCHits from the same super layer to
+                        CDCTriggerSegmentHits.
+KLMTrigger              KLM trigger simulation
+MCMatcherTRGECL         MCMatcherTRGECLModule
+TRGCDC                  TRGCDCModule(TRGCDCModule 5.07)
+TRGCDCTSStream          TRGCDCTSStreamModule(TRGCDCTSStreamModule 0.00)
+TRGECL                  TRGECLModule(TRGECLModule 1.00)
+TRGECLFAM               TRGECLFAMModule(TRGECLFAMModule 1.00)
+TRGGDL                  TRGGDLModule(TRGGDLModule 0.00)
+TRGGRL                  TRGGRLModule(TRGGRLModule 0.00)
+TRGGRLMatch             match CDC trigger tracks and ECL trigger clusters
+TRGGRLProjects          TRGGRLProjectsModule(TRGGRLProjectsModule 0.00)
+
+                                      vxd                                       
+VXDDQM                  VXD DQM module
+VXDMisalignment         Initialize VXD misalignment
+--------------------------------------------------------------------------------
+
+To show detailed information on a module, including its parameters,
+type 'basf2 -m ModuleName'. Use 'basf2 -m package' to only list
+modules belonging to a given package.
+ 
